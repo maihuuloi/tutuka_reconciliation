@@ -20,8 +20,8 @@ public class GetReconciliationStepdefs extends SpringIntegrationTest {
 
     @Given("user have two valid transaction files")
     public void userHaveTwoValidTransactionFiles() throws FileNotFoundException {
-        file1 = ResourceUtils.getFile("classpath:testfile/clientmarkofffile20140113.csv");
-        file2 = ResourceUtils.getFile("classpath:testfile/tutukamarkofffile20140113.csv");
+        file1 = ResourceUtils.getFile("classpath:testfile/file1.csv");
+        file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
 
     }
 
@@ -38,9 +38,9 @@ public class GetReconciliationStepdefs extends SpringIntegrationTest {
     public void returnReconciliationOverview() {
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ReconciliationOverviewResponse reconciliationOverviewResponse = (ReconciliationOverviewResponse) responseEntity.getBody();
-        Assert.assertNotNull(reconciliationOverviewResponse.getTotalRecord());
-        Assert.assertNotNull(reconciliationOverviewResponse.getMatchingRecord());
-        Assert.assertNotNull(reconciliationOverviewResponse.getUnmatchedRecord());
+        Assert.assertNotNull(reconciliationOverviewResponse.getFile1MatchingCount());
+        Assert.assertNotNull(reconciliationOverviewResponse.getFile1TotalCount());
+        Assert.assertNotNull(reconciliationOverviewResponse.getFile1UnmatchedCount());
     }
 
 }
