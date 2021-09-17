@@ -1,6 +1,6 @@
-package com.tutuka.txmanagement.provider;
+package com.tutuka.txmanagement.reconciliation;
 
-import com.tutuka.txmanagement.provider.matcher.ValueMatcher;
+import com.tutuka.txmanagement.reconciliation.matcher.ValueMatcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

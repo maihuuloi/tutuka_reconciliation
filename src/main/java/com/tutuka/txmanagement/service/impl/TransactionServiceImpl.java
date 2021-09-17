@@ -2,10 +2,10 @@ package com.tutuka.txmanagement.service.impl;
 
 import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
 import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
-import com.tutuka.txmanagement.provider.RecitationResult;
+import com.tutuka.txmanagement.reconciliation.RecitationResult;
 import com.tutuka.txmanagement.exception.BadRequestException;
-import com.tutuka.txmanagement.provider.ReconciliationProvider;
-import com.tutuka.txmanagement.provider.exception.InvalidFileException;
+import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
+import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
 import com.tutuka.txmanagement.service.TransactionService;
 import org.springframework.stereotype.Service;
 

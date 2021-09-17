@@ -1,9 +1,9 @@
-package com.tutuka.txmanagement.provider;
+package com.tutuka.txmanagement.reconciliation;
 
-import com.tutuka.txmanagement.provider.matcher.MatchingResult;
-import com.tutuka.txmanagement.provider.matcher.RecordMatcher;
-import com.tutuka.txmanagement.provider.model.Record;
-import com.tutuka.txmanagement.provider.parser.FileParser;
+import com.tutuka.txmanagement.reconciliation.matcher.MatchingResult;
+import com.tutuka.txmanagement.reconciliation.matcher.RecordMatcher;
+import com.tutuka.txmanagement.reconciliation.model.Record;
+import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 
 import java.util.ArrayList;
 import java.util.List;

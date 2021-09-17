@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.matcher;
+package com.tutuka.txmanagement.reconciliation.matcher;
 
 public class StringSimilarMatcher implements ValueMatcher<String>{
     @Override

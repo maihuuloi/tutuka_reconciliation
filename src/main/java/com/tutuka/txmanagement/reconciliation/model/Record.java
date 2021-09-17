@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.model;
+package com.tutuka.txmanagement.reconciliation.model;
 
 public interface Record {
 

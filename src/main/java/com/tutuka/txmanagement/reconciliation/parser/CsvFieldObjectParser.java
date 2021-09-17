@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.parser;
+package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -6,7 +6,7 @@ import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.opencsv.bean.HeaderNameBaseMappingStrategy;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import com.tutuka.txmanagement.provider.model.FieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.annotation;
+package com.tutuka.txmanagement.reconciliation.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,7 @@
-package com.tutuka.txmanagement.provider.parser;
+package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.exceptions.CsvException;
-import com.tutuka.txmanagement.provider.model.Record;
+import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.io.File;
 import java.io.IOException;

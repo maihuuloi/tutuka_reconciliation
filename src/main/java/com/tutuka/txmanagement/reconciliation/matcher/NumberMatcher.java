@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.matcher;
+package com.tutuka.txmanagement.reconciliation.matcher;
 
 public class NumberMatcher<T extends Number> implements ValueMatcher<T>{
     @Override

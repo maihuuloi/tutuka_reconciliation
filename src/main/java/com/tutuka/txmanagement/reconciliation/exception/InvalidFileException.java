@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.exception;
+package com.tutuka.txmanagement.reconciliation.exception;
 
 public class InvalidFileException extends Exception{
     public InvalidFileException() {

@@ -1,7 +1,7 @@
-package com.tutuka.txmanagement.provider.model;
+package com.tutuka.txmanagement.reconciliation.model;
 
 import com.tutuka.txmanagement.exception.ColumnNameNotFoundException;
-import com.tutuka.txmanagement.provider.annotation.MatchColumnName;
+import com.tutuka.txmanagement.reconciliation.annotation.MatchColumnName;
 
 import java.lang.reflect.Field;
 

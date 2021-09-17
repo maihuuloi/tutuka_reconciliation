@@ -1,16 +1,16 @@
 package com.tutuka.txmanagement.configuration;
 
 import com.tutuka.txmanagement.dto.TransactionRecord;
-import com.tutuka.txmanagement.provider.KeyColumnReconciliationProvider;
-import com.tutuka.txmanagement.provider.MatchingCriteria;
-import com.tutuka.txmanagement.provider.ReconciliationProvider;
-import com.tutuka.txmanagement.provider.matcher.DateRangeMatcher;
-import com.tutuka.txmanagement.provider.matcher.NumberMatcher;
-import com.tutuka.txmanagement.provider.matcher.OneToOneRecordMatcher;
-import com.tutuka.txmanagement.provider.matcher.RecordMatcher;
-import com.tutuka.txmanagement.provider.matcher.StringExactMatcher;
-import com.tutuka.txmanagement.provider.parser.CsvFieldObjectParser;
-import com.tutuka.txmanagement.provider.parser.FileParser;
+import com.tutuka.txmanagement.reconciliation.KeyColumnReconciliationProvider;
+import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
+import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
+import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
+import com.tutuka.txmanagement.reconciliation.matcher.NumberMatcher;
+import com.tutuka.txmanagement.reconciliation.matcher.OneToOneRecordMatcher;
+import com.tutuka.txmanagement.reconciliation.matcher.RecordMatcher;
+import com.tutuka.txmanagement.reconciliation.matcher.StringExactMatcher;
+import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
+import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

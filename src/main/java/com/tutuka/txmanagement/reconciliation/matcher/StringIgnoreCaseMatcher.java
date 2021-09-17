@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.provider.matcher;
+package com.tutuka.txmanagement.reconciliation.matcher;
 
 public class StringIgnoreCaseMatcher implements ValueMatcher<String>{
     @Override

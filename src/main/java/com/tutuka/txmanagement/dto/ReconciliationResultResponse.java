@@ -1,6 +1,6 @@
 package com.tutuka.txmanagement.dto;
 
-import com.tutuka.txmanagement.provider.RecitationResult;
+import com.tutuka.txmanagement.reconciliation.RecitationResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

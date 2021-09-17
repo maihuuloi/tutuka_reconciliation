@@ -2,8 +2,8 @@ package com.tutuka.txmanagement.dto;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
-import com.tutuka.txmanagement.provider.annotation.MatchColumnName;
-import com.tutuka.txmanagement.provider.model.FieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.annotation.MatchColumnName;
+import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

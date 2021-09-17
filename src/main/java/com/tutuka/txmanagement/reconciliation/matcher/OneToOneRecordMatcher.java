@@ -1,7 +1,7 @@
-package com.tutuka.txmanagement.provider.matcher;
+package com.tutuka.txmanagement.reconciliation.matcher;
 
-import com.tutuka.txmanagement.provider.MatchingCriteria;
-import com.tutuka.txmanagement.provider.model.Record;
+import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
+import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.math.BigDecimal;
 import java.util.List;
