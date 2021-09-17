@@ -5,11 +5,11 @@ Feature: Transaction Reconciliation
     Then return valid reconciliation overview
 
   Scenario: Reconcile different
-    Given two transaction files with duplicate id record set
+    Given two identical transaction files with duplicate id record set
     When client call reconciliation api to reconcile these transaction files
     Then return valid reconciliation overview with equal metrics
 
   Scenario: Reconcile
-    Given two identical transaction files with duplicate id record set
+    Given file one contain transaction id not match in file two
     When client call reconciliation api to reconcile these transaction files
-    Then return valid reconciliation overview with equal metrics
+    Then return valid number of un matched in file one greater file two
