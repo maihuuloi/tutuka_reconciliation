@@ -4,11 +4,11 @@ import com.opencsv.exceptions.CsvException;
 import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
 import com.tutuka.reconciliation.dto.ReconciliationResultResponse;
 import com.tutuka.reconciliation.dto.TransactionRecitationResult;
-import com.tutuka.reconciliation.provider.TransactionRecord;
 import com.tutuka.reconciliation.exception.BadRequestException;
-import com.tutuka.reconciliation.provider.parser.FileParser;
 import com.tutuka.reconciliation.provider.MatchingResult;
 import com.tutuka.reconciliation.provider.RecordMatcher;
+import com.tutuka.reconciliation.provider.TransactionRecord;
+import com.tutuka.reconciliation.provider.parser.FileParser;
 import com.tutuka.reconciliation.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,17 +30,45 @@ public class TransactionServiceImpl implements TransactionService {
     private FileParser fileParser;
 
     public ReconciliationResultResponse reconcile(File file1, File file2) {
-        ReconciliationResultResponse response =new ReconciliationResultResponse();
+        ReconciliationResultResponse response = new ReconciliationResultResponse();
         List<TransactionRecitationResult> recitationResults = getTransactionRecitationResults(file1, file2);
 
-        ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverview(recitationResults);
+        ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(recitationResults);
         response.setReconciliationOverview(reconciliationOverviewResponse);
-        response.setRecitationResults(recitationResults);
+
+        List<TransactionRecitationResult> unmatchedRecords = getUnmatchedRecords(recitationResults);
+        response.setUnmatchedRecords(unmatchedRecords);
+
+        List<TransactionRecitationResult> matchingRecords = getMatchingRecords(recitationResults);
+        response.setMatchingRecords(matchingRecords);
+
+        List<TransactionRecitationResult> suggestedRecords = getSuggestedRecords(recitationResults);
+        response.setMatchingRecords(suggestedRecords);
+
         return response;
 
     }
 
-    public ReconciliationOverviewResponse toConciliationOverview(List<TransactionRecitationResult> recitationResults) {
+    private List<TransactionRecitationResult> getUnmatchedRecords(List<TransactionRecitationResult> recitationResults) {
+        return recitationResults
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().equals(BigDecimal.ZERO))
+                .collect(Collectors.toList());
+    }
+
+    private List<TransactionRecitationResult> getMatchingRecords(List<TransactionRecitationResult> recitationResults) {
+        return recitationResults
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().equals(BigDecimal.ONE))
+                .collect(Collectors.toList());
+    }
+
+    private List<TransactionRecitationResult> getSuggestedRecords(List<TransactionRecitationResult> recitationResults) {
+        return recitationResults
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE) == -1
+                        && r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO) == 1)
+                .collect(Collectors.toList());
+    }
+
+    public ReconciliationOverviewResponse toConciliationOverviewResponse(List<TransactionRecitationResult> recitationResults) {
         Integer file1TotalCount = 0;
         Integer file1MatchingCount = 0;
         Integer file1UnmatchedCount = 0;

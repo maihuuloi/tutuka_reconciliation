@@ -11,5 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReconciliationResultResponse {
     ReconciliationOverviewResponse reconciliationOverview;
-    List<TransactionRecitationResult> recitationResults;
+    List<TransactionRecitationResult> matchingRecords;
+    List<TransactionRecitationResult> unmatchedRecords;
+    List<TransactionRecitationResult> suggestedRecords;
 }
