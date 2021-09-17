@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ColumnMatcherConfig<T> {
+public class MatchingCriteria<T> {
     private String columnName;
     private Integer score;
     private ValueMatcher<T> valueMatcher;

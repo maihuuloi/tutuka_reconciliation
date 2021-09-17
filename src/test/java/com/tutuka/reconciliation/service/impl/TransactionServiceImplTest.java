@@ -29,8 +29,8 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.getConciliationOverview(file1, file2);
-        System.out.println(response);
+        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+
         //Assert
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getFile1TotalCount());
@@ -44,7 +44,7 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.getConciliationOverview(file1, file2);
+        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertNotNull(response);
@@ -61,8 +61,9 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/none_id_match_from_file1_to_file2_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.getConciliationOverview(file1, file2);
-        System.out.println(response);
+        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+
+        //Assert
         Assert.assertNotSame(response.getFile1TotalCount() ,  response.getFile2TotalCount());
     }
 
@@ -73,8 +74,9 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/none_id_match_from_file2_to_file1_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.getConciliationOverview(file1, file2);
-        System.out.println(response);
+        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+
+        //Assert
         Assert.assertNotSame(response.getFile1TotalCount() ,  response.getFile2TotalCount());
     }
 
@@ -85,8 +87,7 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/duplicate_id_records_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.getConciliationOverview(file1, file2);
-        System.out.println(response);
+        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertSame(response.getFile1TotalCount(), response.getFile2TotalCount());

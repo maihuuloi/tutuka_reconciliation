@@ -1,6 +1,6 @@
 package com.tutuka.reconciliation.util;
 
-import com.tutuka.reconciliation.dto.TransactionRecord;
+import com.tutuka.reconciliation.provider.TransactionRecord;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;

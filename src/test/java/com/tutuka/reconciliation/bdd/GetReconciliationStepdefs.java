@@ -18,14 +18,13 @@ public class GetReconciliationStepdefs extends SpringIntegrationTest {
     private File file1;
     private File file2;
 
-    @Given("user have two valid transaction files")
+    @Given("two valid transaction files set")
     public void userHaveTwoValidTransactionFiles() throws FileNotFoundException {
         file1 = ResourceUtils.getFile("classpath:testfile/file1.csv");
         file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
-
     }
 
-    @When("client upload two transaction files to transactions reconciliation-overview api")
+    @When("client call reconciliation api to reconcile these transaction files")
     public void clientUploadTwoTransactionFilesToTransactionsReconciliationOverview() {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("files",file1);
@@ -34,7 +33,7 @@ public class GetReconciliationStepdefs extends SpringIntegrationTest {
         executeMultipartFilePost("/transactions/reconciliation-overview", body, ReconciliationOverviewResponse.class);
     }
 
-    @Then("return reconciliation overview")
+    @Then("return valid reconciliation overview")
     public void returnReconciliationOverview() {
         Assert.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         ReconciliationOverviewResponse reconciliationOverviewResponse = (ReconciliationOverviewResponse) responseEntity.getBody();

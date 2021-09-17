@@ -1,12 +1,12 @@
 package com.tutuka.reconciliation.configuration;
 
-import com.tutuka.reconciliation.dto.TransactionRecord;
-import com.tutuka.reconciliation.processor.CsvParser;
-import com.tutuka.reconciliation.provider.ColumnNameReconciliationProvider;
-import com.tutuka.reconciliation.provider.ColumnMatcherConfig;
-import com.tutuka.reconciliation.provider.matcher.DateMatcher;
+import com.tutuka.reconciliation.provider.TransactionRecord;
+import com.tutuka.reconciliation.provider.parser.FileParser;
+import com.tutuka.reconciliation.provider.OneToOneRecordMatcher;
+import com.tutuka.reconciliation.provider.MatchingCriteria;
+import com.tutuka.reconciliation.provider.matcher.DateRangeMatcher;
 import com.tutuka.reconciliation.provider.matcher.NumberMatch;
-import com.tutuka.reconciliation.provider.ReconciliationProvider;
+import com.tutuka.reconciliation.provider.RecordMatcher;
 import com.tutuka.reconciliation.provider.matcher.StringExactMatcher;
 import com.tutuka.reconciliation.util.CsvUtils;
 import org.springframework.context.annotation.Bean;
@@ -20,49 +20,49 @@ import java.util.List;
 public class AppConfiguration {
 
     @Bean
-    public ReconciliationProvider getReconciliationProvider() {
-        List<ColumnMatcherConfig> columnMatcherConfigs = new ArrayList<>();
+    public RecordMatcher getReconciliationProvider() {
+        List<MatchingCriteria> matchingCriteria = new ArrayList<>();
         //TODO: move to configuration file
-        ColumnMatcherConfig transactionAmount = ColumnMatcherConfig.<Double>builder()
+        MatchingCriteria transactionAmount = MatchingCriteria.<Double>builder()
         .columnName("TransactionAmount")
         .score(1)
         .valueMatcher(new NumberMatch())
         .mustMatch(false)
         .build();
 
-        columnMatcherConfigs.add(transactionAmount);
-        ColumnMatcherConfig walletReference = ColumnMatcherConfig.<String>builder()
+        matchingCriteria.add(transactionAmount);
+        MatchingCriteria walletReference = MatchingCriteria.<String>builder()
                 .columnName("WalletReference")
                 .score(1)
                 .valueMatcher(new StringExactMatcher())
                 .mustMatch(false)
                 .build();
 
-        columnMatcherConfigs.add(walletReference);
+        matchingCriteria.add(walletReference);
 
-        ColumnMatcherConfig transactionNarrative = ColumnMatcherConfig.<String>builder()
+        MatchingCriteria transactionNarrative = MatchingCriteria.<String>builder()
                 .columnName("TransactionNarrative")
                 .score(1)
                 .valueMatcher(new StringExactMatcher())
                 .mustMatch(false)
                 .build();
-        columnMatcherConfigs.add(transactionNarrative);
+        matchingCriteria.add(transactionNarrative);
 
-        ColumnMatcherConfig transactionDate =  ColumnMatcherConfig.<Date>builder()
+        MatchingCriteria transactionDate =  MatchingCriteria.<Date>builder()
                 .columnName("TransactionDate")
                 .score(1)
-                .valueMatcher(new DateMatcher())
+                .valueMatcher(new DateRangeMatcher())
                 .mustMatch(false)
                 .build();
 
-        columnMatcherConfigs.add(transactionDate);
+        matchingCriteria.add(transactionDate);
 
-        ReconciliationProvider provider = new ColumnNameReconciliationProvider(columnMatcherConfigs);
+        RecordMatcher provider = new OneToOneRecordMatcher(matchingCriteria);
         return provider;
     }
 
     @Bean
-    public CsvParser csvParser(){
+    public FileParser fileParser(){
         return (file -> CsvUtils.toList(file, TransactionRecord.class));
     }
 }

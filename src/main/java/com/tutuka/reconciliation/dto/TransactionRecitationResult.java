@@ -1,6 +1,7 @@
 package com.tutuka.reconciliation.dto;
 
 import com.tutuka.reconciliation.provider.MatchingResult;
+import com.tutuka.reconciliation.provider.TransactionRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
