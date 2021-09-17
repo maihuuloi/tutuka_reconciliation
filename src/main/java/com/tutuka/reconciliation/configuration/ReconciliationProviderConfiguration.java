@@ -3,11 +3,11 @@ package com.tutuka.reconciliation.configuration;
 import com.tutuka.reconciliation.dto.TransactionRecord;
 import com.tutuka.reconciliation.provider.KeyColumnReconciliationProvider;
 import com.tutuka.reconciliation.provider.MatchingCriteria;
-import com.tutuka.reconciliation.provider.matcher.OneToOneRecordMatcher;
 import com.tutuka.reconciliation.provider.ReconciliationProvider;
-import com.tutuka.reconciliation.provider.matcher.RecordMatcher;
 import com.tutuka.reconciliation.provider.matcher.DateRangeMatcher;
 import com.tutuka.reconciliation.provider.matcher.NumberMatcher;
+import com.tutuka.reconciliation.provider.matcher.OneToOneRecordMatcher;
+import com.tutuka.reconciliation.provider.matcher.RecordMatcher;
 import com.tutuka.reconciliation.provider.matcher.StringExactMatcher;
 import com.tutuka.reconciliation.provider.parser.CsvFieldObjectParser;
 import com.tutuka.reconciliation.provider.parser.FileParser;
@@ -22,9 +22,21 @@ import java.util.List;
 public class ReconciliationProviderConfiguration {
 
     @Bean
+    public ReconciliationProvider reconciliationProvider() {
+        return new KeyColumnReconciliationProvider(getReconciliationProvider()
+                , fileParser()
+                , "TransactionID");
+    }
+
+    @Bean
+    public FileParser fileParser() {
+        return new CsvFieldObjectParser(TransactionRecord.class);
+    }
+
+    @Bean
     public RecordMatcher getReconciliationProvider() {
         List<MatchingCriteria> matchingCriteria = new ArrayList<>();
-        //TODO: move to configuration file
+        //TODO: move to configuration file or provider user an interface
         MatchingCriteria transactionAmount = MatchingCriteria.<Double>builder()
                 .columnName("TransactionAmount")
                 .score(1)
@@ -63,13 +75,4 @@ public class ReconciliationProviderConfiguration {
         return provider;
     }
 
-    @Bean
-    public FileParser fileParser() {
-        return new CsvFieldObjectParser(TransactionRecord.class);
-    }
-
-    @Bean
-    public ReconciliationProvider reconciliationProvider() {
-        return new KeyColumnReconciliationProvider(getReconciliationProvider(), fileParser(), "TransactionID");
-    }
 }

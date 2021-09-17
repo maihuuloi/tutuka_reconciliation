@@ -1,7 +1,6 @@
 package com.tutuka.reconciliation.provider.matcher;
 
 import com.tutuka.reconciliation.provider.MatchingCriteria;
-import com.tutuka.reconciliation.provider.MatchingResult;
 import com.tutuka.reconciliation.provider.model.Record;
 
 import java.math.BigDecimal;

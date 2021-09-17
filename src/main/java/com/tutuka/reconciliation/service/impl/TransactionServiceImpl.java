@@ -2,12 +2,11 @@ package com.tutuka.reconciliation.service.impl;
 
 import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
 import com.tutuka.reconciliation.dto.ReconciliationResultResponse;
-import com.tutuka.reconciliation.dto.TransactionRecitationResult;
+import com.tutuka.reconciliation.provider.RecitationResult;
 import com.tutuka.reconciliation.exception.BadRequestException;
 import com.tutuka.reconciliation.provider.ReconciliationProvider;
 import com.tutuka.reconciliation.provider.exception.InvalidFileException;
 import com.tutuka.reconciliation.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -25,7 +24,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     public ReconciliationResultResponse reconcile(File file1, File file2) {
         ReconciliationResultResponse response = new ReconciliationResultResponse();
-        List<TransactionRecitationResult> recitationResults;
+        List<RecitationResult> recitationResults;
         try {
             recitationResults = reconciliationProvider.reconcile(file1, file2);
         } catch (InvalidFileException e) {
@@ -35,46 +34,46 @@ public class TransactionServiceImpl implements TransactionService {
         ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(recitationResults);
         response.setReconciliationOverview(reconciliationOverviewResponse);
 
-        List<TransactionRecitationResult> unmatchedRecords = getUnmatchedRecords(recitationResults);
+        List<RecitationResult> unmatchedRecords = getUnmatchedRecords(recitationResults);
         response.setUnmatchedRecords(unmatchedRecords);
 
-        List<TransactionRecitationResult> matchingRecords = getMatchingRecords(recitationResults);
+        List<RecitationResult> matchingRecords = getMatchingRecords(recitationResults);
         response.setMatchingRecords(matchingRecords);
 
-        List<TransactionRecitationResult> suggestedRecords = getSuggestedRecords(recitationResults);
-        response.setMatchingRecords(suggestedRecords);
+        List<RecitationResult> suggestedRecords = getSuggestedRecords(recitationResults);
+        response.setSuggestedRecords(suggestedRecords);
 
         return response;
 
     }
 
-    private List<TransactionRecitationResult> getUnmatchedRecords(List<TransactionRecitationResult> recitationResults) {
+    private List<RecitationResult> getUnmatchedRecords(List<RecitationResult> recitationResults) {
         return recitationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().equals(BigDecimal.ZERO))
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO)==0)
                 .collect(Collectors.toList());
     }
 
-    private List<TransactionRecitationResult> getMatchingRecords(List<TransactionRecitationResult> recitationResults) {
+    private List<RecitationResult> getMatchingRecords(List<RecitationResult> recitationResults) {
         return recitationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().equals(BigDecimal.ONE))
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE)==0)
                 .collect(Collectors.toList());
     }
 
-    private List<TransactionRecitationResult> getSuggestedRecords(List<TransactionRecitationResult> recitationResults) {
+    private List<RecitationResult> getSuggestedRecords(List<RecitationResult> recitationResults) {
         return recitationResults
                 .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE) == -1
                         && r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO) == 1)
                 .collect(Collectors.toList());
     }
 
-    public ReconciliationOverviewResponse toConciliationOverviewResponse(List<TransactionRecitationResult> recitationResults) {
+    public ReconciliationOverviewResponse toConciliationOverviewResponse(List<RecitationResult> recitationResults) {
         Integer file1TotalCount = 0;
         Integer file1MatchingCount = 0;
         Integer file1UnmatchedCount = 0;
         Integer file2TotalCount = 0;
         Integer file2MatchingCount = 0;
         Integer file2UnmatchedCount = 0;
-        for (TransactionRecitationResult recitationResult : recitationResults) {
+        for (RecitationResult recitationResult : recitationResults) {
             if (recitationResult.getRecord1() == null) {
                 file2TotalCount++;
                 file2UnmatchedCount++;

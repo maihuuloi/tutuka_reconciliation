@@ -1,18 +1,12 @@
 package com.tutuka.reconciliation.provider;
 
-import com.opencsv.exceptions.CsvException;
-import com.tutuka.reconciliation.dto.TransactionRecitationResult;
-import com.tutuka.reconciliation.provider.exception.InvalidFileException;
+import com.tutuka.reconciliation.provider.matcher.MatchingResult;
 import com.tutuka.reconciliation.provider.matcher.RecordMatcher;
 import com.tutuka.reconciliation.provider.model.Record;
 import com.tutuka.reconciliation.provider.parser.FileParser;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DefaultReconciliationProvider extends ReconciliationProvider{
 
@@ -21,11 +15,11 @@ public class DefaultReconciliationProvider extends ReconciliationProvider{
         super(recordMatcher, fileParser);
     }
 
-    protected List<TransactionRecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
-        List<TransactionRecitationResult> recitationResults = new ArrayList<>();
+    protected List<RecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
+        List<RecitationResult> recitationResults = new ArrayList<>();
 
         for (Record record1 : file1Records) {
-            TransactionRecitationResult result = new TransactionRecitationResult();
+            RecitationResult result = new RecitationResult();
             MatchingResult bestMatch = MatchingResult.zeroMatching();
             int index = 0;
             for (int i = 0; i < file2Records.size(); i++) {

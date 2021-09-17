@@ -1,4 +1,4 @@
-package com.tutuka.reconciliation.provider;
+package com.tutuka.reconciliation.provider.matcher;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,6 @@ public class MatchingResult {
     private List<String> unmatchedColumns = new ArrayList<>();
 
     public static MatchingResult zeroMatching() {
-
         return new MatchingResult(BigDecimal.ZERO, new ArrayList<>());
     }
 }

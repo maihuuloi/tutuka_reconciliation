@@ -1,5 +1,6 @@
 package com.tutuka.reconciliation.dto;
 
+import com.tutuka.reconciliation.provider.RecitationResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReconciliationResultResponse {
     ReconciliationOverviewResponse reconciliationOverview;
-    List<TransactionRecitationResult> matchingRecords;
-    List<TransactionRecitationResult> unmatchedRecords;
-    List<TransactionRecitationResult> suggestedRecords;
+    List<RecitationResult> matchingRecords;
+    List<RecitationResult> unmatchedRecords;
+    List<RecitationResult> suggestedRecords;
 }

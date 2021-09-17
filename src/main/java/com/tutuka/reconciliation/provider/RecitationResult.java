@@ -1,6 +1,6 @@
-package com.tutuka.reconciliation.dto;
+package com.tutuka.reconciliation.provider;
 
-import com.tutuka.reconciliation.provider.MatchingResult;
+import com.tutuka.reconciliation.provider.matcher.MatchingResult;
 import com.tutuka.reconciliation.provider.model.Record;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TransactionRecitationResult {
+public class RecitationResult {
     private Record record1;
     private Record record2;
     private MatchingResult matchingResult;

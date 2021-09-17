@@ -1,14 +1,10 @@
 package com.tutuka.reconciliation.provider;
 
-import com.opencsv.exceptions.CsvException;
-import com.tutuka.reconciliation.dto.TransactionRecitationResult;
-import com.tutuka.reconciliation.provider.exception.InvalidFileException;
+import com.tutuka.reconciliation.provider.matcher.MatchingResult;
 import com.tutuka.reconciliation.provider.matcher.RecordMatcher;
 import com.tutuka.reconciliation.provider.model.Record;
 import com.tutuka.reconciliation.provider.parser.FileParser;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +19,12 @@ public class KeyColumnReconciliationProvider extends ReconciliationProvider {
         this.keyColumn = keyColumn;
     }
 
-
-
-    protected List<TransactionRecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
-        List<TransactionRecitationResult> recitationResults = new ArrayList<>();
+    protected List<RecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
+        List<RecitationResult> recitationResults = new ArrayList<>();
 
         Map<Object, List<Record>> file2IdMap = file2Records.stream().collect(Collectors.groupingBy(r -> r.getValueByColumnName("TransactionID"), Collectors.toList()));
         for (Record record1 : file1Records) {
-            TransactionRecitationResult result = new TransactionRecitationResult();
+            RecitationResult result = new RecitationResult();
             List<Record> record2List = file2IdMap.get(record1.getValueByColumnName(keyColumn));
             if (record2List == null || record2List.isEmpty()) {
                 result.setMatchingResult(MatchingResult.zeroMatching());
@@ -56,8 +50,8 @@ public class KeyColumnReconciliationProvider extends ReconciliationProvider {
             recitationResults.add(result);
         }
 
-        List<TransactionRecitationResult> file2UnmatchedResult = file2IdMap.values().stream().
-                flatMap(s -> s.stream()).map(t -> TransactionRecitationResult.builder().record2(t).matchingResult(MatchingResult.zeroMatching()).build())
+        List<RecitationResult> file2UnmatchedResult = file2IdMap.values().stream().
+                flatMap(s -> s.stream()).map(t -> RecitationResult.builder().record2(t).matchingResult(MatchingResult.zeroMatching()).build())
                 .collect(Collectors.toList());
         recitationResults.addAll(file2UnmatchedResult);
         return recitationResults;
