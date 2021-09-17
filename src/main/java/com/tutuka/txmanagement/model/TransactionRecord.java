@@ -40,7 +40,7 @@ public class TransactionRecord extends FieldObjectRecord {
 
     @CsvBindByName(column = "TransactionID")
     @MatchColumnName(name = "TransactionID")
-    private String transactionId;
+    private String transactionID;
 
     @CsvBindByName(column = "TransactionType")
     @MatchColumnName(name = "TransactionType")
