@@ -1,7 +1,6 @@
 package com.tutuka.txmanagement.configuration;
 
-import com.tutuka.txmanagement.dto.TransactionRecord;
-import com.tutuka.txmanagement.reconciliation.KeyColumnReconciliationProvider;
+import com.tutuka.txmanagement.model.TransactionRecord;
 import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
 import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
@@ -23,9 +22,9 @@ public class ReconciliationProviderConfiguration {
 
     @Bean
     public ReconciliationProvider reconciliationProvider() {
-        return new KeyColumnReconciliationProvider(getReconciliationProvider()
+        return new ReconciliationProvider(getReconciliationProvider()
                 , fileParser()
-                , "TransactionID");
+                , "TransactionID") ;
     }
 
     @Bean

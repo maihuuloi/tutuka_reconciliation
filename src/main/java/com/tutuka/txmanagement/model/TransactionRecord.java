@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.dto;
+package com.tutuka.txmanagement.model;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;

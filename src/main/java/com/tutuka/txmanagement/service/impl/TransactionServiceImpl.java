@@ -28,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             recitationResults = reconciliationProvider.reconcile(file1, file2);
         } catch (InvalidFileException e) {
-            throw new BadRequestException("transaction.invalid-format-file");
+            throw new BadRequestException("transaction.invalid-format-file", "File format invalid " + e.getMessage());
         }
 
         ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(recitationResults);

@@ -23,7 +23,7 @@ public class TransactionController {
     @PostMapping("/reconciliation-overview")
     public ReconciliationResultResponse getConciliationOverview(@RequestParam("files") MultipartFile[] files) throws IOException {
         if (files.length != 2) {
-            throw new BadRequestException("transaction.invalid-file-numbers");
+            throw new BadRequestException("transaction.invalid-file-numbers", "Invalid number of files");
         }
         Path file1 = Files.createTempFile("file1", ".csv");
         Path file2 = Files.createTempFile("file2", ".csv");

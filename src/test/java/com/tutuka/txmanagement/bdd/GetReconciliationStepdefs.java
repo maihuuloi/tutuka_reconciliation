@@ -1,6 +1,6 @@
-package com.tutuka.reconciliation.bdd;
+package com.tutuka.txmanagement.bdd;
 
-import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
+import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

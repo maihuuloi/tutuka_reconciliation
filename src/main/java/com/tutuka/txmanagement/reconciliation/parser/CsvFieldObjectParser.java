@@ -20,18 +20,19 @@ public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FilePa
     public CsvFieldObjectParser(Class<T> clazz) {
         this.clazz = clazz;
     }
+
     @Override
-    public List<T > parse(File file) throws IOException, CsvException {
+    public List<T> parse(File file) throws IOException, CsvException {
         try (Reader reader = Files.newBufferedReader(file.toPath())) {
             HeaderNameBaseMappingStrategy mappingStrategy = new HeaderColumnNameMappingStrategy() {
                 @Override
                 public void verifyLineLength(int numberOfFields) throws CsvRequiredFieldEmptyException {
-//                    super.verifyLineLength(numberOfFields);
+                    //super.verifyLineLength(numberOfFields);
                 }
             };
             mappingStrategy.setType(clazz);
             CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader)
-            .withMappingStrategy(mappingStrategy)
+                    .withMappingStrategy(mappingStrategy)
                     .withSeparator(',')
                     .withType(clazz)
                     .withIgnoreLeadingWhiteSpace(true)

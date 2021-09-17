@@ -1,6 +1,6 @@
-package com.tutuka.reconciliation.bdd;
+package com.tutuka.txmanagement.bdd;
 
-import com.tutuka.reconciliation.TutukaReconciliationApplication;
+import com.tutuka.txmanagement.TutukaReconciliationApplication;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 

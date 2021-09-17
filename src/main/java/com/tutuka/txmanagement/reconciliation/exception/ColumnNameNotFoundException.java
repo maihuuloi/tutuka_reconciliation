@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.exception;
+package com.tutuka.txmanagement.reconciliation.exception;
 
 public class ColumnNameNotFoundException extends RuntimeException{
     public ColumnNameNotFoundException() {

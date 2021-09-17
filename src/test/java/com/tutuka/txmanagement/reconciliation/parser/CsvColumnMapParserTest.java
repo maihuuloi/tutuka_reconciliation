@@ -1,13 +1,12 @@
-package com.tutuka.reconciliation.provider.parser;
+package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.exceptions.CsvException;
-import com.tutuka.reconciliation.provider.model.ColumnMapRecord;
+import com.tutuka.txmanagement.reconciliation.model.ColumnMapRecord;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 

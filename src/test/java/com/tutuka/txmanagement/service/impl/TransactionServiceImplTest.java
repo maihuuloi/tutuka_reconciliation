@@ -1,8 +1,8 @@
-package com.tutuka.reconciliation.service.impl;
+package com.tutuka.txmanagement.service.impl;
 
-import com.tutuka.reconciliation.configuration.ReconciliationProviderConfiguration;
-import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
-import com.tutuka.reconciliation.service.TransactionService;
+import com.tutuka.txmanagement.configuration.ReconciliationProviderConfiguration;
+import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
+import com.tutuka.txmanagement.service.TransactionService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
