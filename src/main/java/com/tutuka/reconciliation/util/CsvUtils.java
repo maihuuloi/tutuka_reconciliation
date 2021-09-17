@@ -4,6 +4,8 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
+import com.tutuka.reconciliation.provider.model.ColumnMapRecord;
+import com.tutuka.reconciliation.provider.model.Record;
 
 import java.io.File;
 import java.io.IOException;

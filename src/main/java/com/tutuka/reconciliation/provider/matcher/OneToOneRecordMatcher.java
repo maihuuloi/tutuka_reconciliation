@@ -1,6 +1,8 @@
-package com.tutuka.reconciliation.provider;
+package com.tutuka.reconciliation.provider.matcher;
 
-import com.tutuka.reconciliation.provider.matcher.ValueMatcher;
+import com.tutuka.reconciliation.provider.MatchingCriteria;
+import com.tutuka.reconciliation.provider.MatchingResult;
+import com.tutuka.reconciliation.provider.model.Record;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,10 +19,8 @@ public class OneToOneRecordMatcher implements RecordMatcher {
     }
 
     @Override
-    public MatchingResult calculate(TransactionRecord record1, TransactionRecord record2) {
-        if (!record1.getTransactionId().equals(record2.getTransactionId())) {
-            throw new IllegalArgumentException("Id must be matched");
-        }
+    public MatchingResult compare(Record record1, Record record2) {
+
         MatchingResult matchingResult = new MatchingResult();
         Integer matchScore = 0;
         for (MatchingCriteria matchingCriteria : this.passRule) {

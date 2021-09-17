@@ -1,6 +1,6 @@
 package com.tutuka.reconciliation.service.impl;
 
-import com.tutuka.reconciliation.configuration.AppConfiguration;
+import com.tutuka.reconciliation.configuration.ReconciliationProviderConfiguration;
 import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
 import com.tutuka.reconciliation.service.TransactionService;
 import org.junit.Assert;
@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 
-@ContextConfiguration(classes = {TransactionServiceImpl.class, AppConfiguration.class})
+@ContextConfiguration(classes = {TransactionServiceImpl.class, ReconciliationProviderConfiguration.class})
 @ExtendWith(SpringExtension.class)
 class TransactionServiceImplTest {
 

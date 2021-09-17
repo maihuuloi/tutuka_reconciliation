@@ -1,6 +1,6 @@
 package com.tutuka.reconciliation.util;
 
-import com.tutuka.reconciliation.provider.TransactionRecord;
+import com.tutuka.reconciliation.provider.model.Record;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
@@ -13,11 +13,11 @@ class CsvUtilsTest {
     @Test
     public void toList_WhenValidFile_ThenReturnListOfBean() throws Exception {
         File file1 = ResourceUtils.getFile("classpath:testfile/file1.csv");
-        List<TransactionRecord> transactionRecords = CsvUtils.toList(file1, TransactionRecord.class);
+        List<Record> records = CsvUtils.toList(file1, Record.class);
 
-        Assert.assertNotNull(transactionRecords);
-        Assert.assertFalse(transactionRecords.isEmpty());
-        System.out.println(transactionRecords.get(0));
+        Assert.assertNotNull(records);
+        Assert.assertFalse(records.isEmpty());
+        System.out.println(records.get(0));
     }
 
 }

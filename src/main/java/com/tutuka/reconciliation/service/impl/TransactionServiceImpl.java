@@ -1,37 +1,36 @@
 package com.tutuka.reconciliation.service.impl;
 
-import com.opencsv.exceptions.CsvException;
 import com.tutuka.reconciliation.dto.ReconciliationOverviewResponse;
 import com.tutuka.reconciliation.dto.ReconciliationResultResponse;
 import com.tutuka.reconciliation.dto.TransactionRecitationResult;
 import com.tutuka.reconciliation.exception.BadRequestException;
-import com.tutuka.reconciliation.provider.MatchingResult;
-import com.tutuka.reconciliation.provider.RecordMatcher;
-import com.tutuka.reconciliation.provider.TransactionRecord;
-import com.tutuka.reconciliation.provider.parser.FileParser;
+import com.tutuka.reconciliation.provider.ReconciliationProvider;
+import com.tutuka.reconciliation.provider.exception.InvalidFileException;
 import com.tutuka.reconciliation.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
+    private final ReconciliationProvider reconciliationProvider;
 
-    @Autowired
-    private RecordMatcher recordMatcher;
-    @Autowired
-    private FileParser fileParser;
+    public TransactionServiceImpl(ReconciliationProvider reconciliationProvider) {
+        this.reconciliationProvider = reconciliationProvider;
+    }
 
     public ReconciliationResultResponse reconcile(File file1, File file2) {
         ReconciliationResultResponse response = new ReconciliationResultResponse();
-        List<TransactionRecitationResult> recitationResults = getTransactionRecitationResults(file1, file2);
+        List<TransactionRecitationResult> recitationResults;
+        try {
+            recitationResults = reconciliationProvider.reconcile(file1, file2);
+        } catch (InvalidFileException e) {
+            throw new BadRequestException("transaction.invalid-format-file");
+        }
 
         ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(recitationResults);
         response.setReconciliationOverview(reconciliationOverviewResponse);
@@ -108,62 +107,5 @@ public class TransactionServiceImpl implements TransactionService {
         return response;
     }
 
-    private List<TransactionRecitationResult> getTransactionRecitationResults(File file1, File file2) {
-        List<TransactionRecord> file1TransactionRecords = null;
-        List<TransactionRecord> file2TransactionRecords = null;
-        try {
-            file1TransactionRecords = fileParser.parse(file1);
-            file2TransactionRecords = fileParser.parse(file2);
-
-        } catch (CsvException e) {
-            throw new BadRequestException("transaction.invalid-format-file");
-        } catch (IOException e) {
-            //TODO: internal exception
-//            throw e;
-        }
-
-        List<TransactionRecitationResult> recitationResults = getTransactionRecitationResults(file1TransactionRecords, file2TransactionRecords);
-
-        return recitationResults;
-    }
-
-    private List<TransactionRecitationResult> getTransactionRecitationResults(List<TransactionRecord> file1TransactionRecords, List<TransactionRecord> file2TransactionRecords) {
-        Map<String, List<TransactionRecord>> file2IdMap = file2TransactionRecords.stream().collect(Collectors.groupingBy(TransactionRecord::getTransactionId, Collectors.toList()));
-
-        List<TransactionRecitationResult> recitationResults = new ArrayList<>();
-
-        for (TransactionRecord transactionRecord1 : file1TransactionRecords) {
-            TransactionRecitationResult result = new TransactionRecitationResult();
-            List<TransactionRecord> transactionRecord2List = file2IdMap.get(transactionRecord1.getTransactionId());
-            if (transactionRecord2List == null || transactionRecord2List.isEmpty()) {
-                result.setMatchingResult(MatchingResult.zeroMatching());
-            } else {
-                MatchingResult bestMatch = MatchingResult.zeroMatching();
-                int index = 0;
-                for (int i = 0; i < transactionRecord2List.size(); i++) {
-                    MatchingResult matchingResult = recordMatcher.calculate(transactionRecord1, transactionRecord2List.get(i));
-                    boolean isHigherThanCurrentBestMatch = bestMatch.getMatchingPercentage().compareTo(matchingResult.getMatchingPercentage()) == -1;
-
-                    if (isHigherThanCurrentBestMatch) {
-                        bestMatch = matchingResult;
-                        index = i;
-                    }
-                }
-                result.setMatchingResult(bestMatch);
-                TransactionRecord transactionRecord2 = transactionRecord2List.remove(index);
-                result.setRecord2(transactionRecord2);
-            }
-
-            result.setRecord1(transactionRecord1);
-
-            recitationResults.add(result);
-        }
-
-        List<TransactionRecitationResult> file2UnmatchedResult = file2IdMap.values().stream().
-                flatMap(s -> s.stream()).map(t -> TransactionRecitationResult.builder().record2(t).matchingResult(MatchingResult.zeroMatching()).build())
-                .collect(Collectors.toList());
-        recitationResults.addAll(file2UnmatchedResult);
-        return recitationResults;
-    }
 
 }

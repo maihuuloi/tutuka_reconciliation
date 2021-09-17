@@ -1,14 +1,16 @@
 package com.tutuka.reconciliation.configuration;
 
-import com.tutuka.reconciliation.provider.TransactionRecord;
-import com.tutuka.reconciliation.provider.parser.FileParser;
-import com.tutuka.reconciliation.provider.OneToOneRecordMatcher;
+import com.tutuka.reconciliation.dto.TransactionRecord;
+import com.tutuka.reconciliation.provider.KeyColumnReconciliationProvider;
 import com.tutuka.reconciliation.provider.MatchingCriteria;
+import com.tutuka.reconciliation.provider.matcher.OneToOneRecordMatcher;
+import com.tutuka.reconciliation.provider.ReconciliationProvider;
+import com.tutuka.reconciliation.provider.matcher.RecordMatcher;
 import com.tutuka.reconciliation.provider.matcher.DateRangeMatcher;
-import com.tutuka.reconciliation.provider.matcher.NumberMatch;
-import com.tutuka.reconciliation.provider.RecordMatcher;
+import com.tutuka.reconciliation.provider.matcher.NumberMatcher;
 import com.tutuka.reconciliation.provider.matcher.StringExactMatcher;
-import com.tutuka.reconciliation.util.CsvUtils;
+import com.tutuka.reconciliation.provider.parser.CsvFieldObjectParser;
+import com.tutuka.reconciliation.provider.parser.FileParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,18 +19,18 @@ import java.util.Date;
 import java.util.List;
 
 @Configuration
-public class AppConfiguration {
+public class ReconciliationProviderConfiguration {
 
     @Bean
     public RecordMatcher getReconciliationProvider() {
         List<MatchingCriteria> matchingCriteria = new ArrayList<>();
         //TODO: move to configuration file
         MatchingCriteria transactionAmount = MatchingCriteria.<Double>builder()
-        .columnName("TransactionAmount")
-        .score(1)
-        .valueMatcher(new NumberMatch())
-        .mustMatch(false)
-        .build();
+                .columnName("TransactionAmount")
+                .score(1)
+                .valueMatcher(new NumberMatcher())
+                .mustMatch(false)
+                .build();
 
         matchingCriteria.add(transactionAmount);
         MatchingCriteria walletReference = MatchingCriteria.<String>builder()
@@ -48,7 +50,7 @@ public class AppConfiguration {
                 .build();
         matchingCriteria.add(transactionNarrative);
 
-        MatchingCriteria transactionDate =  MatchingCriteria.<Date>builder()
+        MatchingCriteria transactionDate = MatchingCriteria.<Date>builder()
                 .columnName("TransactionDate")
                 .score(1)
                 .valueMatcher(new DateRangeMatcher())
@@ -62,7 +64,12 @@ public class AppConfiguration {
     }
 
     @Bean
-    public FileParser fileParser(){
-        return (file -> CsvUtils.toList(file, TransactionRecord.class));
+    public FileParser fileParser() {
+        return new CsvFieldObjectParser(TransactionRecord.class);
+    }
+
+    @Bean
+    public ReconciliationProvider reconciliationProvider() {
+        return new KeyColumnReconciliationProvider(getReconciliationProvider(), fileParser(), "TransactionID");
     }
 }
