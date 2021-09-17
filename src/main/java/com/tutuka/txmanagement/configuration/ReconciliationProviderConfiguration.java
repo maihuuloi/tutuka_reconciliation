@@ -1,12 +1,10 @@
 package com.tutuka.txmanagement.configuration;
 
 import com.tutuka.txmanagement.model.TransactionRecord;
-import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
+import com.tutuka.txmanagement.reconciliation.MatchingConfig;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
 import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.NumberMatcher;
-import com.tutuka.txmanagement.reconciliation.matcher.OneToOneRecordMatcher;
-import com.tutuka.txmanagement.reconciliation.matcher.RecordMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.StringExactMatcher;
 import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
@@ -22,9 +20,8 @@ public class ReconciliationProviderConfiguration {
 
     @Bean
     public ReconciliationProvider reconciliationProvider() {
-        return new ReconciliationProvider(getReconciliationProvider()
-                , fileParser()
-                , "TransactionID") ;
+        return new ReconciliationProvider(getPassRule()
+                , fileParser()) ;
     }
 
     @Bean
@@ -32,46 +29,48 @@ public class ReconciliationProviderConfiguration {
         return new CsvFieldObjectParser(TransactionRecord.class);
     }
 
-    @Bean
-    public RecordMatcher getReconciliationProvider() {
-        List<MatchingCriteria> matchingCriteria = new ArrayList<>();
-        //TODO: move to configuration file or provider user an interface
-        MatchingCriteria transactionAmount = MatchingCriteria.<Double>builder()
+    //TODO: move to configuration file or provider user an interface
+    private List<MatchingConfig> getPassRule() {
+        List<MatchingConfig> matchingCriteria = new ArrayList<>();
+        MatchingConfig transactionID = MatchingConfig.<String>builder()
+                .columnName("TransactionID")
+                .score(4)
+                .valueMatcher(new StringExactMatcher())
+                .index(true)
+                .build();
+        matchingCriteria.add(transactionID);
+
+        MatchingConfig transactionAmount = MatchingConfig.<Double>builder()
                 .columnName("TransactionAmount")
                 .score(1)
                 .valueMatcher(new NumberMatcher())
-                .mustMatch(false)
                 .build();
 
         matchingCriteria.add(transactionAmount);
-        MatchingCriteria walletReference = MatchingCriteria.<String>builder()
+        MatchingConfig walletReference = MatchingConfig.<String>builder()
                 .columnName("WalletReference")
                 .score(1)
                 .valueMatcher(new StringExactMatcher())
-                .mustMatch(false)
                 .build();
 
         matchingCriteria.add(walletReference);
 
-        MatchingCriteria transactionNarrative = MatchingCriteria.<String>builder()
+        MatchingConfig transactionNarrative = MatchingConfig.<String>builder()
                 .columnName("TransactionNarrative")
                 .score(1)
                 .valueMatcher(new StringExactMatcher())
-                .mustMatch(false)
                 .build();
         matchingCriteria.add(transactionNarrative);
 
-        MatchingCriteria transactionDate = MatchingCriteria.<Date>builder()
+        MatchingConfig transactionDate = MatchingConfig.<Date>builder()
                 .columnName("TransactionDate")
                 .score(1)
                 .valueMatcher(new DateRangeMatcher())
-                .mustMatch(false)
                 .build();
 
         matchingCriteria.add(transactionDate);
 
-        RecordMatcher provider = new OneToOneRecordMatcher(matchingCriteria);
-        return provider;
+        return matchingCriteria;
     }
 
 }

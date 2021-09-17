@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MatchingCriteria<T> {
+public class MatchingConfig<T> {
     private String columnName;
     private Integer score;
     private ValueMatcher<T> valueMatcher;
-    private boolean mustMatch;
+    private boolean index;
 }

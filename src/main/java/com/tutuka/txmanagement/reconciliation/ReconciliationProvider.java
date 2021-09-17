@@ -3,7 +3,6 @@ package com.tutuka.txmanagement.reconciliation;
 import com.opencsv.exceptions.CsvException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
 import com.tutuka.txmanagement.reconciliation.matcher.MatchingResult;
-import com.tutuka.txmanagement.reconciliation.matcher.RecordMatcher;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.apache.commons.lang3.StringUtils;
@@ -17,21 +16,15 @@ import java.util.stream.Collectors;
 
 
 public  class ReconciliationProvider {
-    protected RecordMatcher recordMatcher;
-    private FileParser fileParser;
-    private String keyColumn;
+    protected final RecordMatcher recordMatcher;
+    private final List<MatchingConfig> passRule;
+    private final FileParser fileParser;
 
-    public ReconciliationProvider(RecordMatcher recordMatcher, FileParser fileParser) {
-        this.recordMatcher = recordMatcher;
+    public ReconciliationProvider(List<MatchingConfig> passRule, FileParser fileParser) {
+        this.passRule = passRule;
         this.fileParser = fileParser;
+        this.recordMatcher = new RecordMatcher(passRule);
     }
-
-    public ReconciliationProvider(RecordMatcher recordMatcher, FileParser fileParser, String keyColumn) {
-        this.recordMatcher = recordMatcher;
-        this.fileParser = fileParser;
-        this.keyColumn = keyColumn;
-    }
-
 
     public List<RecitationResult> reconcile(File source1, File source2) throws InvalidFileException {
         List<Record> source1Records = null;
@@ -54,21 +47,31 @@ public  class ReconciliationProvider {
 
     protected List<RecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
         List<RecitationResult> recitationResults = new ArrayList<>();
-
-        if (StringUtils.isNotEmpty(keyColumn)) {
-            List<RecitationResult> withKey = reconcileWithKey(file1Records, file2Records);
-            recitationResults.addAll(withKey);
-            List<RecitationResult> withoutKey = reconcileWithoutKey(file1Records, file2Records);
-            recitationResults.addAll(withoutKey);
+        String indexColumn = getIndexColumn();
+        if (StringUtils.isNotEmpty(indexColumn)) {
+            List<RecitationResult> withIndex = reconcileWithIndex(file1Records, file2Records, indexColumn);
+            recitationResults.addAll(withIndex);
+            List<RecitationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
+            recitationResults.addAll(withoutIndex);
         } else {
-            List<RecitationResult> withoutKey = reconcileWithoutKey(file1Records, file2Records);
-            recitationResults.addAll(withoutKey);
+            List<RecitationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
+            recitationResults.addAll(withoutIndex);
         }
 
         return recitationResults;
     }
 
-    private List<RecitationResult> reconcileWithoutKey(List<Record> file1Records, List<Record> file2Records) {
+    private String getIndexColumn() {
+
+        for (MatchingConfig matchingConfig : passRule) {
+            if (matchingConfig.isIndex()) {
+                return matchingConfig.getColumnName();
+            }
+        }
+        return null;
+    }
+
+    private List<RecitationResult> reconcileWithoutIndex(List<Record> file1Records, List<Record> file2Records) {
         List<RecitationResult> recitationResults = new ArrayList<>();
         for (Record record1 : file1Records) {
             RecitationResult result = new RecitationResult();
@@ -103,14 +106,14 @@ public  class ReconciliationProvider {
         return recitationResults;
     }
 
-    private List<RecitationResult> reconcileWithKey(List<Record> file1Records, List<Record> file2Records) {
+    private List<RecitationResult> reconcileWithIndex(List<Record> file1Records, List<Record> file2Records, String indexColumn) {
         List<RecitationResult> recitationResults = new ArrayList<>();
 
         List<Record> file1NoKeyFoundRecords = new ArrayList<>();
         Map<Object, List<Record>> file2IdMap = file2Records.stream().collect(Collectors.groupingBy(r -> r.getValueByColumnName("TransactionID"), Collectors.toList()));
         for (Record file1Record : file1Records) {
             RecitationResult result = new RecitationResult();
-            List<Record> file2RecordList = file2IdMap.get(file1Record.getValueByColumnName(keyColumn));
+            List<Record> file2RecordList = file2IdMap.get(file1Record.getValueByColumnName(indexColumn));
             if (file2RecordList == null || file2RecordList.isEmpty()) {
                 file1NoKeyFoundRecords.add(file1Record);
                 continue;

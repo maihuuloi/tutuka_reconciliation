@@ -2,11 +2,13 @@ package com.tutuka.txmanagement.service.impl;
 
 import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
 import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
-import com.tutuka.txmanagement.reconciliation.RecitationResult;
 import com.tutuka.txmanagement.exception.BadRequestException;
+import com.tutuka.txmanagement.reconciliation.RecitationResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
+import com.tutuka.txmanagement.reconciliation.exception.ColumnNameNotFoundException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
 import com.tutuka.txmanagement.service.TransactionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class TransactionServiceImpl implements TransactionService {
     private final ReconciliationProvider reconciliationProvider;
@@ -27,8 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
         List<RecitationResult> recitationResults;
         try {
             recitationResults = reconciliationProvider.reconcile(file1, file2);
-        } catch (InvalidFileException e) {
-            throw new BadRequestException("transaction.invalid-format-file", "File format invalid " + e.getMessage());
+        } catch (InvalidFileException | ColumnNameNotFoundException e) {
+            throw new BadRequestException("transaction.reconciliation.invalid-format-file", "File format invalid", e);
         }
 
         ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(recitationResults);
@@ -49,13 +52,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     private List<RecitationResult> getUnmatchedRecords(List<RecitationResult> recitationResults) {
         return recitationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO)==0)
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO) == 0)
                 .collect(Collectors.toList());
     }
 
     private List<RecitationResult> getMatchingRecords(List<RecitationResult> recitationResults) {
         return recitationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE)==0)
+                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE) == 0)
                 .collect(Collectors.toList());
     }
 
