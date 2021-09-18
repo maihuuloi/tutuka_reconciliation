@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReconciliationOverviewResponse {
+public class ReconciliationSummaryResponse {
     private Integer file1TotalCount;
     private Integer file1MatchingCount;
     private Integer file1UnmatchedCount;

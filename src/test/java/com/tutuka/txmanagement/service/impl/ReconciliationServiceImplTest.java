@@ -1,8 +1,8 @@
 package com.tutuka.txmanagement.service.impl;
 
 import com.tutuka.txmanagement.configuration.ReconciliationProviderConfiguration;
-import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
-import com.tutuka.txmanagement.service.TransactionService;
+import com.tutuka.txmanagement.dto.ReconciliationSummaryResponse;
+import com.tutuka.txmanagement.service.ReconciliationService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,21 +15,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 
-@ContextConfiguration(classes = {TransactionServiceImpl.class, ReconciliationProviderConfiguration.class})
+@ContextConfiguration(classes = {ReconciliationServiceImpl.class, ReconciliationProviderConfiguration.class})
 @ExtendWith(SpringExtension.class)
-class TransactionServiceImplTest {
+class ReconciliationServiceImplTest {
 
     @Autowired
-    private TransactionService transactionService;
+    private ReconciliationService reconciliationService;
 
     @Test
     public void getReconciliationOverview_WhenFilesValid_ThenReturnReconciliationOverview() throws FileNotFoundException {
         //Arrange
-        File file1 = ResourceUtils.getFile("classpath:testfile/file1.csv");
-        File file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
+        File file1 = ResourceUtils.getFile("classpath:testfile/valid_records_1.csv");
+        File file2 = ResourceUtils.getFile("classpath:testfile/valid_records_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+        ReconciliationSummaryResponse response = reconciliationService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertNotNull(response);
@@ -40,11 +40,11 @@ class TransactionServiceImplTest {
 
     public void getReconciliationOverview_WhenTransactionIdNotfoundInOtherFile_ThenReturnTheseRecordAsUnMatched() throws FileNotFoundException {
         //Arrange
-        File file1 = ResourceUtils.getFile("classpath:testfile/file1.csv");
-        File file2 = ResourceUtils.getFile("classpath:testfile/file2.csv");
+        File file1 = ResourceUtils.getFile("classpath:testfile/valid_records_1.csv");
+        File file2 = ResourceUtils.getFile("classpath:testfile/valid_records_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+        ReconciliationSummaryResponse response = reconciliationService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertNotNull(response);
@@ -61,7 +61,7 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/none_id_match_from_file1_to_file2_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+        ReconciliationSummaryResponse response = reconciliationService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertNotSame(response.getFile1TotalCount() ,  response.getFile2TotalCount());
@@ -74,7 +74,7 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/none_id_match_from_file2_to_file1_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+        ReconciliationSummaryResponse response = reconciliationService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertNotSame(response.getFile1TotalCount() ,  response.getFile2TotalCount());
@@ -87,7 +87,7 @@ class TransactionServiceImplTest {
         File file2 = ResourceUtils.getFile("classpath:testfile/duplicate_id_records_2.csv");
 
         //Act
-        ReconciliationOverviewResponse response = transactionService.reconcile(file1, file2).getReconciliationOverview();
+        ReconciliationSummaryResponse response = reconciliationService.reconcile(file1, file2).getReconciliationOverview();
 
         //Assert
         Assert.assertSame(response.getFile1TotalCount(), response.getFile2TotalCount());

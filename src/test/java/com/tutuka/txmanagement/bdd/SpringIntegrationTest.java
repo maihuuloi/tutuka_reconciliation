@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,7 +21,7 @@ public class SpringIntegrationTest {
     @Autowired
     protected RestTemplate restTemplate;
 
-    private String contextPath = "http://localhost:8082/";
+    private String contextPath = "http://localhost:8080/";
 
 
     protected <T> void executeMultipartFilePost(String path, MultiValueMap<String, Object> body, Class<T> clazz) {

@@ -1,6 +1,6 @@
 package com.tutuka.txmanagement.service.impl;
 
-import com.tutuka.txmanagement.dto.ReconciliationOverviewResponse;
+import com.tutuka.txmanagement.dto.ReconciliationSummaryResponse;
 import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
 import com.tutuka.txmanagement.exception.BadRequestException;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
@@ -34,8 +34,8 @@ public class ReconciliationServiceImpl implements ReconciliationService {
             throw new BadRequestException("transaction.reconciliation.invalid-format-file", "File format invalid", e);
         }
 
-        ReconciliationOverviewResponse reconciliationOverviewResponse = toConciliationOverviewResponse(reconciliationResults);
-        response.setReconciliationOverview(reconciliationOverviewResponse);
+        ReconciliationSummaryResponse reconciliationSummaryResponse = toConciliationOverviewResponse(reconciliationResults);
+        response.setReconciliationOverview(reconciliationSummaryResponse);
 
         List<ReconciliationResult> unmatchedRecords = getUnmatchedRecords(reconciliationResults);
         response.setUnmatchedRecords(unmatchedRecords);
@@ -69,7 +69,7 @@ public class ReconciliationServiceImpl implements ReconciliationService {
                 .collect(Collectors.toList());
     }
 
-    public ReconciliationOverviewResponse toConciliationOverviewResponse(List<ReconciliationResult> reconciliationResults) {
+    public ReconciliationSummaryResponse toConciliationOverviewResponse(List<ReconciliationResult> reconciliationResults) {
         Integer file1TotalCount = 0;
         Integer file1MatchingCount = 0;
         Integer file1UnmatchedCount = 0;
@@ -104,7 +104,7 @@ public class ReconciliationServiceImpl implements ReconciliationService {
             }
         }
 
-        ReconciliationOverviewResponse response = new ReconciliationOverviewResponse();
+        ReconciliationSummaryResponse response = new ReconciliationSummaryResponse();
         response.setFile1TotalCount(file1TotalCount);
         response.setFile1MatchingCount(file1MatchingCount);
         response.setFile1UnmatchedCount(file1UnmatchedCount);
