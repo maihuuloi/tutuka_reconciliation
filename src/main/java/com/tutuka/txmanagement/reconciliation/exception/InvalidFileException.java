@@ -1,5 +1,8 @@
 package com.tutuka.txmanagement.reconciliation.exception;
 
+/**
+ * This exception will be throw when content of data source is not parsable
+ */
 public class InvalidFileException extends Exception{
     public InvalidFileException() {
     }

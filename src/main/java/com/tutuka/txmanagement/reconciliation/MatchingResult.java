@@ -1,4 +1,4 @@
-package com.tutuka.txmanagement.reconciliation.matcher;
+package com.tutuka.txmanagement.reconciliation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Result of {@link com.tutuka.txmanagement.reconciliation.RecordMatcher} matching process
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

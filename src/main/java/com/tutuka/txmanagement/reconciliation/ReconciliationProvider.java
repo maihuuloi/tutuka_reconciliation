@@ -2,7 +2,6 @@ package com.tutuka.txmanagement.reconciliation;
 
 import com.opencsv.exceptions.CsvException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
-import com.tutuka.txmanagement.reconciliation.matcher.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.apache.commons.lang3.StringUtils;
@@ -14,67 +13,82 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
-public  class ReconciliationProvider {
+/**
+ * Reconcile 2 set of data sources
+ * @implNote This is better to become an interface, but YAGNI.
+ */
+public class ReconciliationProvider {
     protected final RecordMatcher recordMatcher;
-    private final List<MatchingConfig> passRule;
+
+    /**
+     * Index column will help the search perform faster.
+     * But there is a trade off, the result may not be the best match
+     * since the matching process is performed on the subset of records which has index column equal.
+     * <br/>When to use index column:
+     * <ul>
+     * <li>It perform best on column has unique value like ID, Transaction ID, Statement ID ...</li>
+     * <li>Most of values in this column are potentially matched</li>
+     * <li>Accepting that the matching result is not optimal sometimes</li>
+     * </ul>
+     */
+    private final String indexColumn;
+
     private final FileParser fileParser;
 
-    public ReconciliationProvider(List<MatchingConfig> passRule, FileParser fileParser) {
-        this.passRule = passRule;
+    public ReconciliationProvider(RecordMatcher recordMatcher, FileParser fileParser, String indexColumn) {
+        this.recordMatcher = recordMatcher;
         this.fileParser = fileParser;
-        this.recordMatcher = new RecordMatcher(passRule);
+        this.indexColumn = indexColumn;
     }
 
-    public List<RecitationResult> reconcile(File source1, File source2) throws InvalidFileException {
-        List<Record> source1Records = null;
-        List<Record> source2Records = null;
+    /**
+     * Parse two file and reconcile each line from one source to each line in the other source
+     * to find the highest matching
+     * @param source1 source input for reconcile
+     * @param source2 source input for reconcile
+     * @return A list of matching record result
+     * @throws InvalidFileException when the provided data sources have invalid format content
+     */
+    public List<ReconciliationResult> reconcile(File source1, File source2) throws InvalidFileException {
+        List<Record> source1Records;
+        List<Record> source2Records;
         try {
             source1Records = fileParser.parse(source1);
             source2Records = fileParser.parse(source2);
-
         } catch (CsvException e) {
             throw new InvalidFileException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        List<RecitationResult> recitationResults = reconcile(source1Records, source2Records);
+        List<ReconciliationResult> reconciliationResults = reconcile(source1Records, source2Records);
 
-        return recitationResults;
+        return reconciliationResults;
     }
 
 
-    protected List<RecitationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
-        List<RecitationResult> recitationResults = new ArrayList<>();
+    protected List<ReconciliationResult> reconcile(List<Record> file1Records, List<Record> file2Records) {
+        List<ReconciliationResult> reconciliationResults = new ArrayList<>();
         String indexColumn = getIndexColumn();
         if (StringUtils.isNotEmpty(indexColumn)) {
-            List<RecitationResult> withIndex = reconcileWithIndex(file1Records, file2Records, indexColumn);
-            recitationResults.addAll(withIndex);
-            List<RecitationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
-            recitationResults.addAll(withoutIndex);
+            List<ReconciliationResult> withIndex = reconcileWithIndex(file1Records, file2Records, indexColumn);
+            reconciliationResults.addAll(withIndex);
         } else {
-            List<RecitationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
-            recitationResults.addAll(withoutIndex);
+            List<ReconciliationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
+            reconciliationResults.addAll(withoutIndex);
         }
 
-        return recitationResults;
+        return reconciliationResults;
     }
 
     private String getIndexColumn() {
-
-        for (MatchingConfig matchingConfig : passRule) {
-            if (matchingConfig.isIndex()) {
-                return matchingConfig.getColumnName();
-            }
-        }
-        return null;
+        return indexColumn;
     }
 
-    private List<RecitationResult> reconcileWithoutIndex(List<Record> file1Records, List<Record> file2Records) {
-        List<RecitationResult> recitationResults = new ArrayList<>();
+    private List<ReconciliationResult> reconcileWithoutIndex(List<Record> file1Records, List<Record> file2Records) {
+        List<ReconciliationResult> reconciliationResults = new ArrayList<>();
         for (Record record1 : file1Records) {
-            RecitationResult result = new RecitationResult();
+            ReconciliationResult result = new ReconciliationResult();
             MatchingResult bestMatch = MatchingResult.zeroMatching();
             int index = -1;
             for (int i = 0; i < file2Records.size(); i++) {
@@ -96,23 +110,23 @@ public  class ReconciliationProvider {
 
             result.setRecord1(record1);
 
-            recitationResults.add(result);
+            reconciliationResults.add(result);
         }
 
 
-        List<RecitationResult> file2UnmatchedResult = file2Records.stream().map(t -> RecitationResult.builder().record2(t).matchingResult(MatchingResult.zeroMatching()).build())
+        List<ReconciliationResult> file2UnmatchedResult = file2Records.stream().map(t -> ReconciliationResult.builder().record2(t).matchingResult(MatchingResult.zeroMatching()).build())
                 .collect(Collectors.toList());
-        recitationResults.addAll(file2UnmatchedResult);
-        return recitationResults;
+        reconciliationResults.addAll(file2UnmatchedResult);
+        return reconciliationResults;
     }
 
-    private List<RecitationResult> reconcileWithIndex(List<Record> file1Records, List<Record> file2Records, String indexColumn) {
-        List<RecitationResult> recitationResults = new ArrayList<>();
+    private List<ReconciliationResult> reconcileWithIndex(List<Record> file1Records, List<Record> file2Records, String indexColumn) {
+        List<ReconciliationResult> reconciliationResults = new ArrayList<>();
 
         List<Record> file1NoKeyFoundRecords = new ArrayList<>();
         Map<Object, List<Record>> file2IdMap = file2Records.stream().collect(Collectors.groupingBy(r -> r.getValueByColumnName("TransactionID"), Collectors.toList()));
         for (Record file1Record : file1Records) {
-            RecitationResult result = new RecitationResult();
+            ReconciliationResult result = new ReconciliationResult();
             List<Record> file2RecordList = file2IdMap.get(file1Record.getValueByColumnName(indexColumn));
             if (file2RecordList == null || file2RecordList.isEmpty()) {
                 file1NoKeyFoundRecords.add(file1Record);
@@ -135,13 +149,19 @@ public  class ReconciliationProvider {
                 result.setRecord2(file2Record);
                 result.setRecord1(file1Record);
 
-                recitationResults.add(result);
+                reconciliationResults.add(result);
             }
         }
         file1Records.clear();
         file1Records.addAll(file1NoKeyFoundRecords);
 
+        List<ReconciliationResult> withoutIndex = reconcileWithoutIndex(file1Records, file2Records);
+        reconciliationResults.addAll(withoutIndex);
 
-        return recitationResults;
+        return reconciliationResults;
+    }
+
+    public static ReconciliationProviderBuilder builder() {
+        return new ReconciliationProviderBuilder();
     }
 }

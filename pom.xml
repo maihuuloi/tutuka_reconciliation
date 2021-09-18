@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.tutuka</groupId>
-    <artifactId>tutuka_reconciliation</artifactId>
+    <artifactId>tutuka_txmanagement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>tutuka_reconciliation</name>
     <description>Demo project for Spring Boot</description>

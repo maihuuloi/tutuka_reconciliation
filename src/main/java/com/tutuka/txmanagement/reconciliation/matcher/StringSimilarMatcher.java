@@ -1,13 +1,20 @@
 package com.tutuka.txmanagement.reconciliation.matcher;
 
-public class StringSimilarMatcher implements ValueMatcher<String>{
+import org.apache.commons.text.similarity.FuzzyScore;
+import org.apache.commons.text.similarity.JaroWinklerDistance;
+import org.apache.commons.text.similarity.LevenshteinDetailedDistance;
+
+import java.util.Locale;
+
+
+public class StringSimilarMatcher implements ValueMatcher<String> {
+    private static final Double LOWEST_MATCHING_PERCENTAGE = 0.9;
+
     @Override
     public boolean match(String value1, String value2) {
-        if(value1.contains(value2)) {
-            return true;
-        } else if (value2.contains(value1)) {
-            return true;
-        }
-        return false;
+        JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
+        Double distance = jaroWinklerDistance.apply(value1, value2);
+        return distance > LOWEST_MATCHING_PERCENTAGE;
     }
+
 }

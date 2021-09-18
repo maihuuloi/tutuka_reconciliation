@@ -7,14 +7,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Configure how a column will be used to match records
+ * @param <T> Column data type
+ */
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MatchingConfig<T> {
+public class MatchingCriteria<T> {
     private String columnName;
     private Integer score;
     private ValueMatcher<T> valueMatcher;
-    private boolean index;
 }

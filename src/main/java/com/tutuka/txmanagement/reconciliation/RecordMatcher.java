@@ -1,38 +1,46 @@
 package com.tutuka.txmanagement.reconciliation;
 
-import com.tutuka.txmanagement.reconciliation.matcher.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.matcher.ValueMatcher;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Matching records by using a pass rule which contain a set of matching criteria
+ */
 public class RecordMatcher {
 
-    private List<MatchingConfig> passRule;
+    private List<MatchingCriteria> passRule;
 
-    public RecordMatcher(List<MatchingConfig> passRule) {
+    public RecordMatcher(List<MatchingCriteria> passRule) {
         if (passRule == null || passRule.isEmpty()) {
             throw new IllegalArgumentException();
         }
         this.passRule = passRule;
     }
 
+    /**
+     * Compute matching for 2 record by pass rule
+     * @param record1 record to be compare
+     * @param record2 record to be compare
+     * @return matching result has been computed
+     */
     public MatchingResult compare(Record record1, Record record2) {
 
         MatchingResult matchingResult = new MatchingResult();
         Integer matchScore = 0;
-        for (MatchingConfig matchingConfig : this.passRule) {
-            Object value1 = record1.getValueByColumnName(matchingConfig.getColumnName());
-            Object value2 = record2.getValueByColumnName(matchingConfig.getColumnName());
-            ValueMatcher valueMatcher = matchingConfig.getValueMatcher();
+        for (MatchingCriteria matchingCriteria : this.passRule) {
+            Object value1 = record1.getValueByColumnName(matchingCriteria.getColumnName());
+            Object value2 = record2.getValueByColumnName(matchingCriteria.getColumnName());
+            ValueMatcher valueMatcher = matchingCriteria.getValueMatcher();
 
             boolean matched = valueMatcher.match(value1, value2);
 
             if (matched) {
-                matchScore += matchingConfig.getScore();
+                matchScore += matchingCriteria.getScore();
             } else {
-                matchingResult.getUnmatchedColumns().add(matchingConfig.getColumnName());
+                matchingResult.getUnmatchedColumns().add(matchingCriteria.getColumnName());
             }
 
         }
@@ -45,13 +53,13 @@ public class RecordMatcher {
 
     private Integer getTotalScore() {
         Integer totalScore = 0;
-        for (MatchingConfig matchingConfig : this.passRule) {
-            totalScore += matchingConfig.getScore();
+        for (MatchingCriteria matchingCriteria : this.passRule) {
+            totalScore += matchingCriteria.getScore();
         }
         return totalScore;
     }
 
-    public List<MatchingConfig> getPassRule() {
+    public List<MatchingCriteria> getPassRule() {
         return passRule;
     }
 }
