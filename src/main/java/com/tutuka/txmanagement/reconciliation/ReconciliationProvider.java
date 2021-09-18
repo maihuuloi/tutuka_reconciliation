@@ -2,6 +2,7 @@ package com.tutuka.txmanagement.reconciliation;
 
 import com.opencsv.exceptions.CsvException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
+import com.tutuka.txmanagement.reconciliation.exception.ReconciliationException;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +36,7 @@ public class ReconciliationProvider {
      * @return A list of matching record result
      * @throws InvalidFileException when the provided data sources have invalid format content
      */
-    public List<ReconciliationResult> reconcile(File source1, File source2) throws InvalidFileException {
+    public List<ReconciliationResult> reconcile(File source1, File source2) throws ReconciliationException {
         List<Record> source1Records;
         List<Record> source2Records;
         try {

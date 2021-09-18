@@ -7,6 +7,7 @@ import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
 import com.tutuka.txmanagement.reconciliation.exception.ColumnNameNotFoundException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
+import com.tutuka.txmanagement.reconciliation.exception.ReconciliationException;
 import com.tutuka.txmanagement.service.ReconciliationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class ReconciliationServiceImpl implements ReconciliationService {
         List<ReconciliationResult> reconciliationResults;
         try {
             reconciliationResults = reconciliationProvider.reconcile(file1, file2);
-        } catch (InvalidFileException | ColumnNameNotFoundException e) {
-            throw new BadRequestException("transaction.reconciliation.invalid-format-file", "File format invalid", e);
+        } catch (ReconciliationException e) {
+            throw new BadRequestException("transaction.reconciliation.failed", "Reconciliation process failed for input", e);
         }
 
         ReconciliationSummaryResponse reconciliationSummaryResponse = toConciliationOverviewResponse(reconciliationResults);

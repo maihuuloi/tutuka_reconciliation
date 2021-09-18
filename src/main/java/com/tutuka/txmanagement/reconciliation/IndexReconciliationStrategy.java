@@ -1,10 +1,12 @@
 package com.tutuka.txmanagement.reconciliation;
 
+import com.tutuka.txmanagement.reconciliation.exception.InvalidDataException;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +42,7 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
         List<ReconciliationResult> reconciliationResults = new ArrayList<>();
 
         List<Record> source1NoKeyFoundRecords = new ArrayList<>();
-        Map<Object, List<Record>> file2IdMap = source2Records.stream().collect(Collectors.groupingBy(r -> r.getValueByColumnName("TransactionID"), Collectors.toList()));
+        Map<Object, List<Record>> file2IdMap = index(source2Records);
         for (Record source1Record : source1Records) {
             ReconciliationResult result = new ReconciliationResult();
             List<Record> source2RecordList = file2IdMap.get(source1Record.getValueByColumnName(indexColumn));
@@ -75,5 +77,18 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
         reconciliationResults.addAll(withoutIndex);
 
         return reconciliationResults;
+    }
+
+    private Map<Object, List<Record>> index(List<Record> source2Records) {
+        Collector<Record, ?, Map<Object, List<Record>>> indexCollector = Collectors.groupingBy(r -> {
+
+            Object value = r.getValueByColumnName(indexColumn);
+            if (value == null) {
+                throw new InvalidDataException("Index column can not be empty");
+            }
+            return value;
+        }, Collectors.toList());
+        Map<Object, List<Record>> file2IdMap = source2Records.stream().collect(indexCollector);
+        return file2IdMap;
     }
 }
