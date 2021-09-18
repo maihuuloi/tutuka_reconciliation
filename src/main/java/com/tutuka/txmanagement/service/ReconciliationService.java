@@ -4,6 +4,6 @@ import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
 
 import java.io.File;
 
-public interface TransactionService {
+public interface ReconciliationService {
     ReconciliationResultResponse reconcile(File file1, File file2);
 }

@@ -17,8 +17,10 @@ public class ReconciliationOverviewResponse {
     private Integer file1TotalCount;
     private Integer file1MatchingCount;
     private Integer file1UnmatchedCount;
+    private Integer file1SuggestedCount;
 
     private Integer file2TotalCount;
     private Integer file2MatchingCount;
     private Integer file2UnmatchedCount;
+    private Integer file2SuggestedCount;
 }

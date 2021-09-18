@@ -7,7 +7,7 @@ import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
 import com.tutuka.txmanagement.reconciliation.exception.ColumnNameNotFoundException;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
-import com.tutuka.txmanagement.service.TransactionService;
+import com.tutuka.txmanagement.service.ReconciliationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class TransactionServiceImpl implements TransactionService {
+public class ReconciliationServiceImpl implements ReconciliationService {
     private final ReconciliationProvider reconciliationProvider;
 
-    public TransactionServiceImpl(ReconciliationProvider reconciliationProvider) {
+    public ReconciliationServiceImpl(ReconciliationProvider reconciliationProvider) {
         this.reconciliationProvider = reconciliationProvider;
     }
 
@@ -73,27 +73,32 @@ public class TransactionServiceImpl implements TransactionService {
         Integer file1TotalCount = 0;
         Integer file1MatchingCount = 0;
         Integer file1UnmatchedCount = 0;
+        Integer file1SuggestedCount = 0;
         Integer file2TotalCount = 0;
         Integer file2MatchingCount = 0;
         Integer file2UnmatchedCount = 0;
+        Integer file2SuggestedCount = 0;
         for (ReconciliationResult reconciliationResult : reconciliationResults) {
-            if (reconciliationResult.getRecord1() == null) {
+            boolean isRecord1UnmatchedResult = reconciliationResult.getRecord1() == null;
+            boolean isRecord2UnmatchedResult = reconciliationResult.getRecord2() == null;
+            if (isRecord1UnmatchedResult) {
                 file2TotalCount++;
                 file2UnmatchedCount++;
-            } else if (reconciliationResult.getRecord2() == null) {
+            } else if (isRecord2UnmatchedResult) {
                 file1TotalCount++;
                 file1UnmatchedCount++;
             } else {//both record 1 and 2 present => transaction ids are matching
-                boolean perfectMatch = reconciliationResult.getMatchingPercentage().equals(BigDecimal.ONE);
-                if (perfectMatch) {
+                boolean isPerfectMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(BigDecimal.ONE) == 0;
+                boolean isSuggestedMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(BigDecimal.ONE) == -1;
+                if (isPerfectMatchingResult) {
                     file1MatchingCount++;
                     file1TotalCount++;
                     file2MatchingCount++;
                     file2TotalCount++;
-                } else {
-                    file1UnmatchedCount++;
+                } else if(isSuggestedMatchingResult){
+                    file1SuggestedCount++;
                     file1TotalCount++;
-                    file2UnmatchedCount++;
+                    file2SuggestedCount++;
                     file2TotalCount++;
                 }
             }
@@ -103,9 +108,11 @@ public class TransactionServiceImpl implements TransactionService {
         response.setFile1TotalCount(file1TotalCount);
         response.setFile1MatchingCount(file1MatchingCount);
         response.setFile1UnmatchedCount(file1UnmatchedCount);
+        response.setFile1SuggestedCount(file1SuggestedCount);
         response.setFile2TotalCount(file2TotalCount);
         response.setFile2MatchingCount(file2MatchingCount);
         response.setFile2UnmatchedCount(file2UnmatchedCount);
+        response.setFile2SuggestedCount(file2SuggestedCount);
         return response;
     }
 

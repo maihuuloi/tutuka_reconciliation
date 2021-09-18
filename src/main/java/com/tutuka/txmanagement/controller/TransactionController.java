@@ -2,7 +2,7 @@ package com.tutuka.txmanagement.controller;
 
 import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
 import com.tutuka.txmanagement.exception.BadRequestException;
-import com.tutuka.txmanagement.service.TransactionService;
+import com.tutuka.txmanagement.service.ReconciliationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +18,9 @@ import java.nio.file.Path;
 @RequestMapping("/transactions")
 public class TransactionController {
     @Autowired
-    private TransactionService transactionService;
+    private ReconciliationService reconciliationService;
 
-    @PostMapping("/reconciliation-overview")
+    @PostMapping("/reconcile")
     public ReconciliationResultResponse getConciliationOverview(@RequestParam("files") MultipartFile[] files) throws IOException {
         if (files.length != 2) {
             throw new BadRequestException("transaction.reconciliation.invalid-file-numbers", "Invalid number of files");
@@ -30,6 +30,6 @@ public class TransactionController {
         Path file2 = Files.createTempFile("file2", ".csv");
         files[0].transferTo(file1);
         files[1].transferTo(file2);
-        return transactionService.reconcile(file1.toFile(), file2.toFile());
+        return reconciliationService.reconcile(file1.toFile(), file2.toFile());
     }
 }
