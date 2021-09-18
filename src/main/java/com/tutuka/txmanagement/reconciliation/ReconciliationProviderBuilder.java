@@ -1,6 +1,9 @@
 package com.tutuka.txmanagement.reconciliation;
 
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
+import com.tutuka.txmanagement.reconciliation.strategy.GreedyReconciliationStrategy;
+import com.tutuka.txmanagement.reconciliation.strategy.IndexReconciliationStrategy;
+import com.tutuka.txmanagement.reconciliation.strategy.ReconciliationStrategy;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

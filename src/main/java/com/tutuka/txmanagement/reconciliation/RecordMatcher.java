@@ -23,6 +23,7 @@ public class RecordMatcher {
 
     /**
      * Compute matching for 2 record by pass rule
+     *
      * @param record1 record to be compare
      * @param record2 record to be compare
      * @return matching result has been computed
@@ -34,6 +35,11 @@ public class RecordMatcher {
         for (MatchingCriteria matchingCriteria : this.passRule) {
             Object value1 = record1.getValueByColumnName(matchingCriteria.getColumnName());
             Object value2 = record2.getValueByColumnName(matchingCriteria.getColumnName());
+            if (value1 == null || value2 == null) {
+                continue;//skip comparing
+//                throw new InvalidDataException("Criteria column can not be empty");
+            }
+
             ValueMatcher valueMatcher = matchingCriteria.getValueMatcher();
 
             boolean matched = valueMatcher.match(value1, value2);
@@ -46,7 +52,7 @@ public class RecordMatcher {
 
         }
 
-        BigDecimal matchingPercentage = new BigDecimal(matchScore).divide(new BigDecimal(getTotalScore()),2, RoundingMode.HALF_EVEN);
+        BigDecimal matchingPercentage = new BigDecimal(matchScore).divide(new BigDecimal(getTotalScore()), 2, RoundingMode.HALF_EVEN);
         matchingResult.setMatchingPercentage(matchingPercentage);
 
         return matchingResult;

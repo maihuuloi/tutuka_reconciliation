@@ -1,5 +1,6 @@
-package com.tutuka.txmanagement.reconciliation;
+package com.tutuka.txmanagement.reconciliation.strategy;
 
+import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.util.List;

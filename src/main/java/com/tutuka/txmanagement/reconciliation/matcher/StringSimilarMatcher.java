@@ -8,6 +8,9 @@ import java.util.Locale;
 
 
 public class StringSimilarMatcher implements ValueMatcher<String> {
+    /**
+     * Percentage of similarity to be consider as matched
+     */
     private static final Double LOWEST_MATCHING_PERCENTAGE = 0.9;
 
     @Override

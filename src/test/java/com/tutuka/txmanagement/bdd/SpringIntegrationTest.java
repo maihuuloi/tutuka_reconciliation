@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @CucumberContextConfiguration
@@ -31,7 +33,12 @@ public class SpringIntegrationTest {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         String serverUrl = contextPath + path;
-        responseEntity = restTemplate.postForEntity(serverUrl, requestEntity, clazz);
+        try {
+            responseEntity = restTemplate.postForEntity(serverUrl, requestEntity, clazz);
+        } catch(HttpStatusCodeException e) {
+            responseEntity = ResponseEntity.status(e.getRawStatusCode()).headers(e.getResponseHeaders())
+                    .body(e.getResponseBodyAsString());
+        }
 
     }
 

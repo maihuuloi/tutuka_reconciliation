@@ -1,5 +1,8 @@
-package com.tutuka.txmanagement.reconciliation;
+package com.tutuka.txmanagement.reconciliation.strategy;
 
+import com.tutuka.txmanagement.reconciliation.MatchingResult;
+import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
+import com.tutuka.txmanagement.reconciliation.RecordMatcher;
 import com.tutuka.txmanagement.reconciliation.exception.InvalidDataException;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
@@ -45,7 +48,9 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
         Map<Object, List<Record>> file2IdMap = index(source2Records);
         for (Record source1Record : source1Records) {
             ReconciliationResult result = new ReconciliationResult();
-            List<Record> source2RecordList = file2IdMap.get(source1Record.getValueByColumnName(indexColumn));
+            Object indexValue = source1Record.getValueByColumnName(indexColumn);
+
+            List<Record> source2RecordList = file2IdMap.get(indexValue);
             if (source2RecordList == null || source2RecordList.isEmpty()) {
                 source1NoKeyFoundRecords.add(source1Record);
                 continue;

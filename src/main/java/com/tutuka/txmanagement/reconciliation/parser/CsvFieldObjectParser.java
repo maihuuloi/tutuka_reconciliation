@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.opencsv.bean.HeaderNameBaseMappingStrategy;
+import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
@@ -38,6 +39,7 @@ public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FilePa
                     .withIgnoreLeadingWhiteSpace(true)
                     .withIgnoreQuotations(true)
                     .withIgnoreEmptyLine(true)
+                    .withFieldAsNull(CSVReaderNullFieldIndicator.BOTH)
                     .build();
 
             return csvToBean.parse();

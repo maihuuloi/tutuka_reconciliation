@@ -28,12 +28,15 @@ public class ReconciliationServiceImpl implements ReconciliationService {
 
     public ReconciliationResultResponse reconcile(File file1, File file2) {
         ReconciliationResultResponse response = new ReconciliationResultResponse();
+
+        log.debug("Start reconciliation process");
         List<ReconciliationResult> reconciliationResults;
         try {
             reconciliationResults = reconciliationProvider.reconcile(file1, file2);
         } catch (ReconciliationException e) {
             throw new BadRequestException("transaction.reconciliation.failed", "Reconciliation process failed for input", e);
         }
+        log.debug("End reconciliation process with {} result", reconciliationResults.size());
 
         ReconciliationSummaryResponse reconciliationSummaryResponse = toConciliationOverviewResponse(reconciliationResults);
         response.setReconciliationOverview(reconciliationSummaryResponse);

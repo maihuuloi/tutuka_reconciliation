@@ -40,3 +40,8 @@ see `com.tutuka.txmanagement.configuration.ReconciliationProviderConfiguration` 
 ## Build and Run
  1. Run `mvn clean package` to build project
  2. Run `mvn spring-boot:run` to start
+## Improvement
+- The matching, unmatched, and suggested rule can be provided as a configuration to ReconciliationProvider,
+ and the result returned from ReconciliationProvider can have a field to indicate which matching type the result is
+- File content format is not strictly checked at the moment
+- Add more matching strategies 

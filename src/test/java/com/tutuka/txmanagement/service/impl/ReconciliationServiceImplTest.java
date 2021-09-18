@@ -83,7 +83,7 @@ class ReconciliationServiceImplTest {
     @Test
     public void getReconciliationOverview_WhenDuplicateIdRecordsInFileOne_ThenReturnSameResultForTwoFiles() throws FileNotFoundException {
         //Arrange
-        File file1 = ResourceUtils.getFile("classpath:testfile/duplicate_id_records_1.csv");
+        File file1 = ResourceUtils.getFile("classpath:testfile/duplicate_id_records.csv");
         File file2 = ResourceUtils.getFile("classpath:testfile/duplicate_id_records_2.csv");
 
         //Act

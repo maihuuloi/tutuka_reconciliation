@@ -18,6 +18,9 @@ import lombok.Setter;
 @Builder
 public class MatchingCriteria<T> {
     private String columnName;
+    /**
+     * the weight of this column
+     */
     private Integer score;
     private ValueMatcher<T> valueMatcher;
 }
