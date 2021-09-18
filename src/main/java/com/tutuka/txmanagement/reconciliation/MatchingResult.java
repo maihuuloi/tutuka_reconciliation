@@ -1,11 +1,11 @@
 package com.tutuka.txmanagement.reconciliation;
 
+import com.tutuka.txmanagement.reconciliation.constant.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MatchingResult {
-    private BigDecimal matchingPercentage = null;
+    private Integer matchingPercentage = null;
     private List<String> unmatchedColumns = new ArrayList<>();
 
     public static MatchingResult zeroMatching() {
-        return new MatchingResult(BigDecimal.ZERO, new ArrayList<>());
+        return new MatchingResult(Constants.ZERO_PERCENTAGE, new ArrayList<>());
     }
 }

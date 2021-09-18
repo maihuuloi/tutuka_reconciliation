@@ -92,8 +92,8 @@ public class GetReconciliationStepdefs extends SpringIntegrationTest {
 
     @Given("two file with records have TransactionDate empty")
     public void twoFileWithRecordsHaveTransactionDateEmpty() throws FileNotFoundException {
-        file1 = ResourceUtils.getFile("classpath:testfile/transaction_id_empty.csv");
-        file2 = ResourceUtils.getFile("classpath:testfile/transaction_id_empty.csv");
+        file1 = ResourceUtils.getFile("classpath:testfile/transaction_date_empty.csv");
+        file2 = ResourceUtils.getFile("classpath:testfile/transaction_date_empty.csv");
     }
 
     @Then("the client receives status code of {int}")

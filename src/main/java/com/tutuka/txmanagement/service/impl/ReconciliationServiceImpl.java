@@ -1,21 +1,19 @@
 package com.tutuka.txmanagement.service.impl;
 
-import com.tutuka.txmanagement.dto.ReconciliationSummaryResponse;
 import com.tutuka.txmanagement.dto.ReconciliationResultResponse;
+import com.tutuka.txmanagement.dto.ReconciliationSummaryResponse;
 import com.tutuka.txmanagement.exception.BadRequestException;
-import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
-import com.tutuka.txmanagement.reconciliation.exception.ColumnNameNotFoundException;
-import com.tutuka.txmanagement.reconciliation.exception.InvalidFileException;
+import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
+import com.tutuka.txmanagement.reconciliation.constant.Constants;
 import com.tutuka.txmanagement.reconciliation.exception.ReconciliationException;
 import com.tutuka.txmanagement.service.ReconciliationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,37 +39,32 @@ public class ReconciliationServiceImpl implements ReconciliationService {
         ReconciliationSummaryResponse reconciliationSummaryResponse = toConciliationOverviewResponse(reconciliationResults);
         response.setReconciliationOverview(reconciliationSummaryResponse);
 
-        List<ReconciliationResult> unmatchedRecords = getUnmatchedRecords(reconciliationResults);
-        response.setUnmatchedRecords(unmatchedRecords);
-
-        List<ReconciliationResult> matchingRecords = getMatchingRecords(reconciliationResults);
-        response.setMatchingRecords(matchingRecords);
-
-        List<ReconciliationResult> suggestedRecords = getSuggestedRecords(reconciliationResults);
-        response.setSuggestedRecords(suggestedRecords);
+        populateRecordsToResponse(response, reconciliationResults);
 
         return response;
 
     }
 
-    private List<ReconciliationResult> getUnmatchedRecords(List<ReconciliationResult> reconciliationResults) {
-        return reconciliationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO) == 0)
-                .collect(Collectors.toList());
+    private void populateRecordsToResponse(ReconciliationResultResponse response, List<ReconciliationResult> reconciliationResults) {
+        List<ReconciliationResult> unmatchedRecords = new ArrayList<>();
+        List<ReconciliationResult> matchingRecords = new ArrayList<>();
+        List<ReconciliationResult> suggestedRecords = new ArrayList<>();
+
+        for (ReconciliationResult r : reconciliationResults) {
+            if (r.getMatchingPercentage().compareTo(Constants.ONE_HUNDRED_PERCENTAGE) == 0) {
+                matchingRecords.add(r);
+            } else if (r.getMatchingPercentage().compareTo(Constants.ZERO_PERCENTAGE) == 0) {
+                unmatchedRecords.add(r);
+            } else {
+                suggestedRecords.add(r);
+            }
+        }
+
+        response.setUnmatchedRecords(unmatchedRecords);
+        response.setMatchingRecords(matchingRecords);
+        response.setSuggestedRecords(suggestedRecords);
     }
 
-    private List<ReconciliationResult> getMatchingRecords(List<ReconciliationResult> reconciliationResults) {
-        return reconciliationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE) == 0)
-                .collect(Collectors.toList());
-    }
-
-    private List<ReconciliationResult> getSuggestedRecords(List<ReconciliationResult> reconciliationResults) {
-        return reconciliationResults
-                .stream().filter(r -> r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ONE) == -1
-                        && r.getMatchingResult().getMatchingPercentage().compareTo(BigDecimal.ZERO) == 1)
-                .collect(Collectors.toList());
-    }
 
     public ReconciliationSummaryResponse toConciliationOverviewResponse(List<ReconciliationResult> reconciliationResults) {
         Integer file1TotalCount = 0;
@@ -92,14 +85,14 @@ public class ReconciliationServiceImpl implements ReconciliationService {
                 file1TotalCount++;
                 file1UnmatchedCount++;
             } else {//both record 1 and 2 present => transaction ids are matching
-                boolean isPerfectMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(BigDecimal.ONE) == 0;
-                boolean isSuggestedMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(BigDecimal.ONE) == -1;
+                boolean isPerfectMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(Constants.ONE_HUNDRED_PERCENTAGE) == 0;
+                boolean isSuggestedMatchingResult = reconciliationResult.getMatchingPercentage().compareTo(Constants.ONE_HUNDRED_PERCENTAGE) == -1;
                 if (isPerfectMatchingResult) {
                     file1MatchingCount++;
                     file1TotalCount++;
                     file2MatchingCount++;
                     file2TotalCount++;
-                } else if(isSuggestedMatchingResult){
+                } else if (isSuggestedMatchingResult) {
                     file1SuggestedCount++;
                     file1TotalCount++;
                     file2SuggestedCount++;

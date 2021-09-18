@@ -24,7 +24,7 @@ public class ReconciliationResult {
     private Object record2;
     private MatchingResult matchingResult;
 
-    public BigDecimal getMatchingPercentage() {
+    public Integer getMatchingPercentage() {
         return matchingResult.getMatchingPercentage();
     }
 

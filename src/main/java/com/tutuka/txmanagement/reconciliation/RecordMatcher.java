@@ -52,8 +52,9 @@ public class RecordMatcher {
 
         }
 
-        BigDecimal matchingPercentage = new BigDecimal(matchScore).divide(new BigDecimal(getTotalScore()), 2, RoundingMode.HALF_EVEN);
-        matchingResult.setMatchingPercentage(matchingPercentage);
+        BigDecimal matchingPercentage = new BigDecimal(matchScore).multiply(new BigDecimal(100))
+        .divide(new BigDecimal(getTotalScore()), 2, RoundingMode.HALF_EVEN);
+        matchingResult.setMatchingPercentage(matchingPercentage.intValue());
 
         return matchingResult;
     }

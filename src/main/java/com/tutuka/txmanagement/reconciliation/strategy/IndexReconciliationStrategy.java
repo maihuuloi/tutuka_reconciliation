@@ -93,7 +93,7 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
             }
             return value;
         }, Collectors.toList());
-        Map<Object, List<Record>> file2IdMap = source2Records.stream().collect(indexCollector);
+        Map<Object, List<Record>> file2IdMap = source2Records.parallelStream().collect(indexCollector);
         return file2IdMap;
     }
 }
