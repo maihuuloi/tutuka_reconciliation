@@ -4,6 +4,7 @@ import com.tutuka.txmanagement.reconciliation.matcher.ValueMatcher;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -45,11 +46,12 @@ public class RecordMatcher {
 
         }
 
-        BigDecimal matchingPercentage = new BigDecimal(matchScore).divide(new BigDecimal(getTotalScore()));
+        BigDecimal matchingPercentage = new BigDecimal(matchScore).divide(new BigDecimal(getTotalScore()),2, RoundingMode.HALF_EVEN);
         matchingResult.setMatchingPercentage(matchingPercentage);
 
         return matchingResult;
     }
+
 
     private Integer getTotalScore() {
         Integer totalScore = 0;
