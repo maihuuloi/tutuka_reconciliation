@@ -39,19 +39,19 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
 
         List<ReconciliationResult> reconciliationResults = new ArrayList<>();
 
-        List<Record> file1NoKeyFoundRecords = new ArrayList<>();
+        List<Record> source1NoKeyFoundRecords = new ArrayList<>();
         Map<Object, List<Record>> file2IdMap = source2Records.stream().collect(Collectors.groupingBy(r -> r.getValueByColumnName("TransactionID"), Collectors.toList()));
-        for (Record file1Record : source1Records) {
+        for (Record source1Record : source1Records) {
             ReconciliationResult result = new ReconciliationResult();
-            List<Record> file2RecordList = file2IdMap.get(file1Record.getValueByColumnName(indexColumn));
-            if (file2RecordList == null || file2RecordList.isEmpty()) {
-                file1NoKeyFoundRecords.add(file1Record);
+            List<Record> source2RecordList = file2IdMap.get(source1Record.getValueByColumnName(indexColumn));
+            if (source2RecordList == null || source2RecordList.isEmpty()) {
+                source1NoKeyFoundRecords.add(source1Record);
                 continue;
             } else {
                 MatchingResult bestMatch = MatchingResult.zeroMatching();
                 int index = 0;
-                for (int i = 0; i < file2RecordList.size(); i++) {
-                    MatchingResult matchingResult = recordMatcher.compare(file1Record, file2RecordList.get(i));
+                for (int i = 0; i < source2RecordList.size(); i++) {
+                    MatchingResult matchingResult = recordMatcher.compare(source1Record, source2RecordList.get(i));
                     boolean isHigherThanCurrentBestMatch = bestMatch.getMatchingPercentage().compareTo(matchingResult.getMatchingPercentage()) == -1;
 
                     if (isHigherThanCurrentBestMatch) {
@@ -60,16 +60,16 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
                     }
                 }
                 result.setMatchingResult(bestMatch);
-                Record file2Record = file2RecordList.remove(index);
-                source2Records.remove(file2Record);
-                result.setRecord2(file2Record);
-                result.setRecord1(file1Record);
+                Record source2Record = source2RecordList.remove(index);
+                source2Records.remove(source2Record);
+                result.setRecord2(source2Record);
+                result.setRecord1(source1Record);
 
                 reconciliationResults.add(result);
             }
         }
         source1Records.clear();
-        source1Records.addAll(file1NoKeyFoundRecords);
+        source1Records.addAll(source1NoKeyFoundRecords);
 
         List<ReconciliationResult> withoutIndex = greedyReconciliationStrategy.reconcile(source1Records, source2Records);
         reconciliationResults.addAll(withoutIndex);
