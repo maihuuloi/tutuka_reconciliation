@@ -29,20 +29,26 @@ public class RecordMatcher {
      * @return matching result has been computed
      */
     public MatchingResult compare(Record record1, Record record2) {
-
+        if (record1 == null || record2 == null) {
+            throw new IllegalArgumentException("Record must not be null");
+        }
         MatchingResult matchingResult = new MatchingResult();
         Integer matchScore = 0;
         for (MatchingCriteria matchingCriteria : this.passRule) {
             Object value1 = record1.getValueByColumnName(matchingCriteria.getColumnName());
             Object value2 = record2.getValueByColumnName(matchingCriteria.getColumnName());
-            if (value1 == null || value2 == null) {
+
+            if (value1 == null && value2 == null) {
                 continue;//skip comparing
-//                throw new InvalidDataException("Criteria column can not be empty");
+                //throw new InvalidDataException("Criteria column can not be empty");
+            } else if(value1 == null || value2 == null) {
+                matchingResult.getUnmatchedColumns().add(matchingCriteria.getColumnName());
+                continue;
             }
 
             ValueMatcher valueMatcher = matchingCriteria.getValueMatcher();
 
-            boolean matched = valueMatcher.match(value1, value2);
+            boolean matched = valueMatcher.compare(value1, value2);
 
             if (matched) {
                 matchScore += matchingCriteria.getScore();
@@ -53,7 +59,7 @@ public class RecordMatcher {
         }
 
         BigDecimal matchingPercentage = new BigDecimal(matchScore).multiply(new BigDecimal(100))
-        .divide(new BigDecimal(getTotalScore()), 2, RoundingMode.HALF_EVEN);
+                .divide(new BigDecimal(getTotalScore()), 2, RoundingMode.HALF_EVEN);
         matchingResult.setMatchingPercentage(matchingPercentage.intValue());
 
         return matchingResult;

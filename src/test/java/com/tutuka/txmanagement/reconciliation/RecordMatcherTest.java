@@ -2,6 +2,7 @@ package com.tutuka.txmanagement.reconciliation;
 
 import com.tutuka.txmanagement.reconciliation.matcher.EqualMatcher;
 import org.junit.Assert;
+import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,7 +66,7 @@ class RecordMatcherTest {
     }
 
     @Test
-    void compare_whenNoneFieldMatch_ThenReturnZeroMatchingPercentage() {
+    void compare_whenNoFieldMatch_ThenReturnZeroMatchingPercentage() {
         TestFieldObjectRecord record1 = new TestFieldObjectRecord();
         record1.setTransactionID("1");
         record1.setTransactionAmount(1d);
@@ -78,10 +79,26 @@ class RecordMatcherTest {
 
     }
 
+    @Test
+    void compare_whenRecordNull_ThenThrowException() {
+
+        ThrowingRunnable throwingRunnable = () -> recordMatcher.compare(null, null);
+        IllegalArgumentException exception = Assert.assertThrows(IllegalArgumentException.class, throwingRunnable);
+
+        Assert.assertTrue(exception.getMessage().contains("Record must not be null"));
+    }
 
     @Test
-    void compare_whenInputNull_ThenThrowException() {
-        MatchingResult compare = recordMatcher.compare(null, null);
-
+    void compare_whenValueOfAFieldOnOneRecordNull_ThenConsiderThatFieldNotMatched() {
+        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        record1.setTransactionID("1");
+        record1.setTransactionAmount(1d);
+        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        record2.setTransactionID("1");
+        record2.setTransactionAmount(null);
+        MatchingResult result = recordMatcher.compare(record1, record2);
+        Integer percentage = result.getMatchingPercentage();
+        Assert.assertTrue(percentage < 100);
+        Assert.assertTrue(result.getUnmatchedColumns().contains("TransactionAmount"));
     }
 }

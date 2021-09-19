@@ -12,10 +12,15 @@
  - *Matching percentage*: to indicate how many percent the 2 records matched, this number compute base on a pass rule
 ## Process flow
  1. Parse 2 source file into records
- 2. Use strategy for finding matching, unmatched, and suggested records. Currently, 2 strategy are available:
-    2.1 Use index column strategy: create an index (multi value map) for one source for searching, 
-    and walk through each record in the other source, search against the index, then compute matching 
-    2.2 Use exhaustion strategy: walk through each record in one source and find matching record in the other source
+ 2. Use strategy for finding matching, unmatched, and suggested records. 
+    2.1 Currently, 2 strategy are available:
+    - Index column strategy: provide a column name to be indexed, an index (multi value map) of the second source is created for searching. 
+    Walk through each record in the first source, use index to find and compute best matching record in second source, 
+    the matching record will be removed from the second source list.
+    - Exhaustion strategy: walk through each record in first source and find matching record in the second source,
+    the matching record will be removed from the second source list.
+    2.2 empty is considered as a value, that means if both record have empty on a field, they are considered as matched on that field
+    
  3. Return list of matching result. Each of matching result will contain 2 record of two source and a matching percentage
     - 100% is perfect match
     - 0% is unmatched

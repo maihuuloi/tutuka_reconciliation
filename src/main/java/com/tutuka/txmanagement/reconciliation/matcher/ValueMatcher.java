@@ -9,5 +9,5 @@ public interface ValueMatcher<T> {
      * Compute matching for 2 value
      * @return true if matched
      */
-    boolean match(T value1, T value2);
+    boolean compare(T value1, T value2);
 }
