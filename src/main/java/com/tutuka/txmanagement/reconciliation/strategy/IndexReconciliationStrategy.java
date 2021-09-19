@@ -3,7 +3,6 @@ package com.tutuka.txmanagement.reconciliation.strategy;
 import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.RecordMatcher;
-import com.tutuka.txmanagement.reconciliation.exception.InvalidDataException;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
      * <li>It perform best on column has unique value like ID, Transaction ID, Statement ID ...</li>
      * <li>Most of values in this column are potentially matched</li>
      * <li>Accepting that the matching result is not optimal sometimes</li>
+     * <li>Index column is allowed to contain empty value</li>
      * </ul>
      */
     private final String indexColumn;
@@ -85,15 +85,15 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
     }
 
     private Map<Object, List<Record>> index(List<Record> source2Records) {
+
         Collector<Record, ?, Map<Object, List<Record>>> indexCollector = Collectors.groupingBy(r -> {
 
             Object value = r.getValueByColumnName(indexColumn);
-            if (value == null) {
-                throw new InvalidDataException("Index column can not be empty");
-            }
             return value;
         }, Collectors.toList());
-        Map<Object, List<Record>> file2IdMap = source2Records.parallelStream().collect(indexCollector);
+        Map<Object, List<Record>> file2IdMap = source2Records.parallelStream()
+                .filter(r -> r.getValueByColumnName(indexColumn) != null).collect(indexCollector);
+
         return file2IdMap;
     }
 }
