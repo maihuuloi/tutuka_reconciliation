@@ -32,7 +32,7 @@ public class ReconciliationServiceImpl implements ReconciliationService {
         try {
             reconciliationResults = reconciliationProvider.reconcile(file1, file2);
         } catch (ReconciliationException e) {
-            throw new BadRequestException("transaction.reconciliation.failed", "Reconciliation process failed for input", e);
+            throw new BadRequestException("transaction.reconciliation.invalid-input", "Invalid file input", e);
         }
         log.debug("End reconciliation process with {} result", reconciliationResults.size());
 

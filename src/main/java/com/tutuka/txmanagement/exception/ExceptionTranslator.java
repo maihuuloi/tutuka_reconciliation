@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,5 +28,13 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
         return map;
     }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public Map handleFileSizeLimitExceeded(MaxUploadSizeExceededException ex) {
 
+        Map map = new HashMap();
+        map.put("code", "file.limit.exceed");
+        map.put("message", ex.getMessage());
+
+        return map;
+    }
 }

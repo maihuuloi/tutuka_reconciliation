@@ -19,7 +19,8 @@
     the matching record will be removed from the second source list.
     - Exhaustion strategy: walk through each record in first source and find matching record in the second source,
     the matching record will be removed from the second source list.
-    2.2 empty is considered as a value, that means if both record have empty on a field, they are considered as matched on that field
+    2.2 If two record have empty value on same field, the field will be ignored, it is neither considered as matched nor unmatched. 
+    This can lead the two record to be suggested.
     
  3. Return list of matching result. Each of matching result will contain 2 record of two source and a matching percentage
     - 100% is perfect match
