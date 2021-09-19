@@ -35,11 +35,13 @@ Feature: Transaction Reconciliation
     Then the client receives status code of 400
 
   Scenario: Reconciliation failed on empty index column
-    Given two file with records having TransactionID empty
-    When client call reconciliation api to reconcile these transaction files
-    Then the client receives status code of 400
-
-  Scenario: Reconciliation success with missing data in criteria column
-    Given two file with records have TransactionDate empty
+    Given two identical file with records having TransactionID empty
     When client call reconciliation api to reconcile these transaction files
     Then the client receives status code of 200
+    And the client receives at least 1 matching record
+
+  Scenario: Reconciliation success with missing data in criteria column
+    Given two identical file with records have TransactionDate empty
+    When client call reconciliation api to reconcile these transaction files
+    Then the client receives status code of 200
+    And the client receives at least 1 matching record
