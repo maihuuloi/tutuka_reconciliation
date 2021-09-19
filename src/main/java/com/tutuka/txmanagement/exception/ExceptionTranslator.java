@@ -36,7 +36,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         log.debug(ex.getMessage(), ex);
         Map map = new HashMap();
         map.put("code", "file.limit.exceed");
-        map.put("message", "File size exceed limit " + ex.getMaxUploadSize()/1024);
+        map.put("message", "File size exceed limit");
 
         return map;
     }
