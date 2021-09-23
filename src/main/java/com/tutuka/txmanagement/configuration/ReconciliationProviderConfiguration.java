@@ -6,9 +6,6 @@ import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
 import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.EqualMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.StringSimilarMatcher;
-import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
-import com.tutuka.txmanagement.reconciliation.parser.ExcelFieldObjectParser;
-import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

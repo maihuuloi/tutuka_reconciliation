@@ -16,11 +16,11 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.util.List;
 
-public class CsvFieldObjectParser<T extends FieldRecord> implements FileParser<T> {
+public class CsvFieldRecordParser<T extends FieldRecord> implements FileParser<T> {
     private Class<T> clazz;
     private FileParser parserChain;
 
-    public CsvFieldObjectParser(Class<T> clazz) {
+    public CsvFieldRecordParser(Class<T> clazz) {
         this.clazz = clazz;
     }
 

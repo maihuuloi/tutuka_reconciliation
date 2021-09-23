@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-class CsvColumnMapParserTest {
-    CsvColumnMapParser parser = new CsvColumnMapParser();
+class CsvMapRecordParserTest {
+    CsvMapRecordParser parser = new CsvMapRecordParser();
 
     @Test
     public void parse_WhenFileValidFormat_ThenReturnMappedRecords() throws IOException, CsvException {

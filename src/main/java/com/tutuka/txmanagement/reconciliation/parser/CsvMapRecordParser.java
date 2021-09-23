@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvColumnMapParser implements FileParser<MapRecord> {
+public class CsvMapRecordParser implements FileParser<MapRecord> {
     private static final String DELIMITER = ",";
 
     @Override

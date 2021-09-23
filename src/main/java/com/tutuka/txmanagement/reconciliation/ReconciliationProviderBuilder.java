@@ -2,8 +2,8 @@ package com.tutuka.txmanagement.reconciliation;
 
 import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import com.tutuka.txmanagement.reconciliation.model.Record;
-import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
-import com.tutuka.txmanagement.reconciliation.parser.ExcelFieldObjectParser;
+import com.tutuka.txmanagement.reconciliation.parser.CsvFieldRecordParser;
+import com.tutuka.txmanagement.reconciliation.parser.ExcelFieldRecordParser;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import com.tutuka.txmanagement.reconciliation.strategy.GreedyReconciliationStrategy;
 import com.tutuka.txmanagement.reconciliation.strategy.IndexReconciliationStrategy;
@@ -73,11 +73,11 @@ public class ReconciliationProviderBuilder {
 
         if (FieldRecord.class.isAssignableFrom(recordType)) {
             if (isSupportExcel) {
-                CsvFieldObjectParser csvFieldObjectParser = new CsvFieldObjectParser(recordType);
-                csvFieldObjectParser.setNextParser(new ExcelFieldObjectParser(recordType));
-                return csvFieldObjectParser;
+                CsvFieldRecordParser csvFieldRecordParser = new CsvFieldRecordParser(recordType);
+                csvFieldRecordParser.setNextParser(new ExcelFieldRecordParser(recordType));
+                return csvFieldRecordParser;
             } else {
-                return new CsvFieldObjectParser(recordType);
+                return new CsvFieldRecordParser(recordType);
             }
         } else {
             //TODO: implement for handling other record type

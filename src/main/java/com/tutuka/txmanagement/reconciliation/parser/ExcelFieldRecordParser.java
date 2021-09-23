@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExcelFieldObjectParser<T extends FieldRecord> implements FileParser<T> {
+public class ExcelFieldRecordParser<T extends FieldRecord> implements FileParser<T> {
     private final Class<T> clazz;
     private FileParser<T> parserChain;
 
-    public ExcelFieldObjectParser(Class<T> clazz) {
+    public ExcelFieldRecordParser(Class<T> clazz) {
         this.clazz = clazz;
     }
 
@@ -32,7 +32,7 @@ public class ExcelFieldObjectParser<T extends FieldRecord> implements FileParser
         return null;//TODO: Implement excel parse
     }
 
-    public ExcelFieldObjectParser<T> setNextParser(FileParser<T> parserChain) {
+    public ExcelFieldRecordParser<T> setNextParser(FileParser<T> parserChain) {
         this.parserChain = parserChain;
         return this;
     }
