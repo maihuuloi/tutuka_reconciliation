@@ -7,17 +7,16 @@ import com.opencsv.bean.HeaderNameBaseMappingStrategy;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.activation.UnsupportedDataTypeException;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.util.List;
 
-public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FileParser<T> {
+public class CsvFieldObjectParser<T extends FieldRecord> implements FileParser<T> {
     private Class<T> clazz;
     private FileParser parserChain;
 

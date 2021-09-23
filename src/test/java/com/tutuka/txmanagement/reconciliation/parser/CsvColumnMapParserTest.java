@@ -1,7 +1,7 @@
 package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.exceptions.CsvException;
-import com.tutuka.txmanagement.reconciliation.model.ColumnMapRecord;
+import com.tutuka.txmanagement.reconciliation.model.MapRecord;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
@@ -19,7 +19,7 @@ class CsvColumnMapParserTest {
         File file1 = ResourceUtils.getFile("classpath:testfile/csv_valid_file.csv");
 
         //Act
-        List<ColumnMapRecord> parse = parser.parse(file1);
+        List<MapRecord> parse = parser.parse(file1);
 
         //Assert
         Assert.assertNotNull(parse);
@@ -34,7 +34,7 @@ class CsvColumnMapParserTest {
         File file1 = ResourceUtils.getFile("classpath:testfile/csv_mismatch_trailing_separator_file.csv");
 
         //Act
-        List<ColumnMapRecord> parse = parser.parse(file1);
+        List<MapRecord> parse = parser.parse(file1);
 
         //Assert
         Assert.assertNotNull(parse);

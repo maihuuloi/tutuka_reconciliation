@@ -3,7 +3,7 @@ package com.tutuka.txmanagement.model;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
 import com.tutuka.txmanagement.reconciliation.annotation.MatchColumnName;
-import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionRecord extends FieldObjectRecord {
+public class TransactionRecord extends FieldRecord {
 
     @CsvBindByName(column = "ProfileName")
     @MatchColumnName(name = "ProfileName")

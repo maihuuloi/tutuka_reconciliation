@@ -3,7 +3,7 @@ package com.tutuka.txmanagement.reconciliation.strategy;
 import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.RecordMatcher;
-import com.tutuka.txmanagement.reconciliation.TestFieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.TestFieldRecord;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class GreedyReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID("1");
         source1Records.add(record1);
@@ -62,7 +62,7 @@ class GreedyReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID("1");
         source1Records.add(record1);
@@ -86,7 +86,7 @@ class GreedyReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID("1");
         source1Records.add(record1);

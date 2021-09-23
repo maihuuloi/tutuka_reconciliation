@@ -5,7 +5,7 @@ import com.tutuka.txmanagement.reconciliation.annotation.MatchColumnName;
 
 import java.lang.reflect.Field;
 
-public abstract class FieldObjectRecord implements Record {
+public abstract class FieldRecord implements Record {
 
 
     public Object getValueByColumnName(String columnName) {

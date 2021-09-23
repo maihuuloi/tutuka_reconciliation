@@ -3,17 +3,12 @@ package com.tutuka.txmanagement.reconciliation.strategy;
 import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
 import com.tutuka.txmanagement.reconciliation.RecordMatcher;
-import com.tutuka.txmanagement.reconciliation.TestFieldObjectRecord;
-import com.tutuka.txmanagement.reconciliation.exception.InvalidDataException;
+import com.tutuka.txmanagement.reconciliation.TestFieldRecord;
 import com.tutuka.txmanagement.reconciliation.model.Record;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -50,7 +45,7 @@ class IndexReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID("1");
         source1Records.add(record1);
@@ -77,7 +72,7 @@ class IndexReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID(null);
         source1Records.add(record1);
@@ -100,12 +95,12 @@ class IndexReconciliationStrategyTest {
         ArrayList<Record> source1Records = new ArrayList<Record>();
         ArrayList<Record> source2Records = new ArrayList<Record>();
 
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionAmount(1d);
         record1.setTransactionID("1");
         source1Records.add(record1);
 
-        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        TestFieldRecord record2 = new TestFieldRecord();
         record2.setTransactionAmount(0.0D);
         record2.setTransactionID("2");
         source2Records.add(record2);

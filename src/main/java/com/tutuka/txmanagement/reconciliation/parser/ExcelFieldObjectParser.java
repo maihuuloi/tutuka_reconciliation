@@ -1,19 +1,15 @@
 package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.exceptions.CsvException;
-import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
-import com.tutuka.txmanagement.reconciliation.model.Record;
-import org.apache.commons.io.FileUtils;
+import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.activation.UnsupportedDataTypeException;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExcelFieldObjectParser<T extends FieldObjectRecord> implements FileParser<T> {
+public class ExcelFieldObjectParser<T extends FieldRecord> implements FileParser<T> {
     private final Class<T> clazz;
     private FileParser<T> parserChain;
 

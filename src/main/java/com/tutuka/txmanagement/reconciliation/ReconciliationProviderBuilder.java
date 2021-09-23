@@ -1,7 +1,6 @@
 package com.tutuka.txmanagement.reconciliation;
 
-import com.tutuka.txmanagement.model.TransactionRecord;
-import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
+import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
 import com.tutuka.txmanagement.reconciliation.parser.ExcelFieldObjectParser;
@@ -11,7 +10,6 @@ import com.tutuka.txmanagement.reconciliation.strategy.IndexReconciliationStrate
 import com.tutuka.txmanagement.reconciliation.strategy.ReconciliationStrategy;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.activation.UnsupportedDataTypeException;
 import java.util.List;
 
 public class ReconciliationProviderBuilder {
@@ -73,7 +71,7 @@ public class ReconciliationProviderBuilder {
             return fileParser;
         }
 
-        if (FieldObjectRecord.class.isAssignableFrom(recordType)) {
+        if (FieldRecord.class.isAssignableFrom(recordType)) {
             if (isSupportExcel) {
                 CsvFieldObjectParser csvFieldObjectParser = new CsvFieldObjectParser(recordType);
                 csvFieldObjectParser.setNextParser(new ExcelFieldObjectParser(recordType));

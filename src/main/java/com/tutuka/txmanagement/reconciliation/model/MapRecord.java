@@ -3,7 +3,7 @@ package com.tutuka.txmanagement.reconciliation.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ColumnMapRecord implements Record {
+public class MapRecord implements Record {
     private Map<String, String> cells = new HashMap<>();
 
     @Override

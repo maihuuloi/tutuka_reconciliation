@@ -40,10 +40,10 @@ class RecordMatcherTest {
 
     @Test
     void compare_whenAllFieldMatch_ThenReturnOneHundredMatchingPercentage() {
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionID("1");
         record1.setTransactionAmount(1d);
-        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        TestFieldRecord record2 = new TestFieldRecord();
         record2.setTransactionID("1");
         record2.setTransactionAmount(1d);
         MatchingResult compare = recordMatcher.compare(record1, record2);
@@ -54,10 +54,10 @@ class RecordMatcherTest {
 
     @Test
     void compare_whenPartialFieldMatch_ThenReturnBetweenOneHundredAndZeroMatchingPercentage() {
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionID("1");
         record1.setTransactionAmount(1d);
-        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        TestFieldRecord record2 = new TestFieldRecord();
         record2.setTransactionID("2");
         record2.setTransactionAmount(1d);
         MatchingResult compare = recordMatcher.compare(record1, record2);
@@ -67,10 +67,10 @@ class RecordMatcherTest {
 
     @Test
     void compare_whenNoFieldMatch_ThenReturnZeroMatchingPercentage() {
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionID("1");
         record1.setTransactionAmount(1d);
-        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        TestFieldRecord record2 = new TestFieldRecord();
         record2.setTransactionID("2");
         record2.setTransactionAmount(2d);
         MatchingResult compare = recordMatcher.compare(record1, record2);
@@ -90,10 +90,10 @@ class RecordMatcherTest {
 
     @Test
     void compare_whenValueOfAFieldOnOneRecordNull_ThenConsiderThatFieldNotMatched() {
-        TestFieldObjectRecord record1 = new TestFieldObjectRecord();
+        TestFieldRecord record1 = new TestFieldRecord();
         record1.setTransactionID("1");
         record1.setTransactionAmount(1d);
-        TestFieldObjectRecord record2 = new TestFieldObjectRecord();
+        TestFieldRecord record2 = new TestFieldRecord();
         record2.setTransactionID("1");
         record2.setTransactionAmount(null);
         MatchingResult result = recordMatcher.compare(record1, record2);
