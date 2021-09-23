@@ -7,6 +7,7 @@ import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.EqualMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.StringSimilarMatcher;
 import com.tutuka.txmanagement.reconciliation.parser.CsvFieldObjectParser;
+import com.tutuka.txmanagement.reconciliation.parser.ExcelFieldObjectParser;
 import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,10 +30,11 @@ public class ReconciliationProviderConfiguration {
 
     @Bean
     public FileParser fileParser() {
-        return new CsvFieldObjectParser(TransactionRecord.class);
+        CsvFieldObjectParser objectParser = new CsvFieldObjectParser(TransactionRecord.class , new ExcelFieldObjectParser(TransactionRecord.class));
+        return objectParser;
     }
 
-    //TODO: move to configuration file or provider user an interface
+    //TODO: a run time configuration for pass rule
     private List<MatchingCriteria> getPassRule() {
         List<MatchingCriteria> matchingCriteria = new ArrayList<>();
         MatchingCriteria transactionID = MatchingCriteria.<String>builder()

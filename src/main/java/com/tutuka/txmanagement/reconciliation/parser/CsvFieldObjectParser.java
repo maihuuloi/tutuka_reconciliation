@@ -8,7 +8,9 @@ import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.tutuka.txmanagement.reconciliation.model.FieldObjectRecord;
+import org.apache.commons.io.FilenameUtils;
 
+import javax.activation.UnsupportedDataTypeException;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -17,13 +19,30 @@ import java.util.List;
 
 public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FileParser<T> {
     private Class<T> clazz;
+    private FileParser parserChain;
 
     public CsvFieldObjectParser(Class<T> clazz) {
         this.clazz = clazz;
     }
 
+    public CsvFieldObjectParser(Class<T> clazz, FileParser parserChain) {
+        this.clazz = clazz;
+        this.parserChain = parserChain;
+    }
+
     @Override
     public List<T> parse(File file) throws IOException, CsvException {
+        String extension = FilenameUtils.getExtension(file.getName());
+
+        boolean isCsvFile = "csv".equals(extension);
+        if (!isCsvFile) {
+            if (parserChain == null) {
+                throw new UnsupportedDataTypeException("No file parser for file with extension " + extension);
+            }
+
+            return parserChain.parse(file);
+        }
+
         try (Reader reader = Files.newBufferedReader(file.toPath())) {
             HeaderNameBaseMappingStrategy mappingStrategy = new HeaderColumnNameMappingStrategy() {
                 @Override
