@@ -15,15 +15,10 @@ import java.util.List;
 
 public class ExcelFieldObjectParser<T extends FieldObjectRecord> implements FileParser<T> {
     private final Class<T> clazz;
-    FileParser<T> parserChain;
+    private FileParser<T> parserChain;
 
     public ExcelFieldObjectParser(Class<T> clazz) {
         this.clazz = clazz;
-    }
-
-    public ExcelFieldObjectParser(Class<T> clazz, FileParser parserChain) {
-        this.clazz = clazz;
-        this.parserChain = parserChain;
     }
 
     @Override
@@ -32,12 +27,17 @@ public class ExcelFieldObjectParser<T extends FieldObjectRecord> implements File
         boolean isExcelFile = Arrays.asList("xlsx", "xls").contains(extension);
         if(!isExcelFile) {
             if (parserChain == null) {
-                throw new UnsupportedDataTypeException("No file parser for file with extension " + extension);
+                throw new UnsupportedOperationException("No file parser for file with extension " + extension);
             }
 
             return parserChain.parse(file);
         }
 
         return null;//TODO: Implement excel parse
+    }
+
+    public ExcelFieldObjectParser<T> setNextParser(FileParser<T> parserChain) {
+        this.parserChain = parserChain;
+        return this;
     }
 }

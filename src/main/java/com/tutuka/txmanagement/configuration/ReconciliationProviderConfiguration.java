@@ -23,16 +23,12 @@ public class ReconciliationProviderConfiguration {
     public ReconciliationProvider reconciliationProvider() {
         return ReconciliationProvider.builder()
                 .passRule(getPassRule())
-                .fileParser(fileParser())
+                .recordType(TransactionRecord.class)
                 .indexColumn("TransactionID")
+                .supportExcel()
                 .build();
     }
 
-    @Bean
-    public FileParser fileParser() {
-        CsvFieldObjectParser objectParser = new CsvFieldObjectParser(TransactionRecord.class , new ExcelFieldObjectParser(TransactionRecord.class));
-        return objectParser;
-    }
 
     //TODO: a run time configuration for pass rule
     private List<MatchingCriteria> getPassRule() {

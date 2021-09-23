@@ -25,11 +25,6 @@ public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FilePa
         this.clazz = clazz;
     }
 
-    public CsvFieldObjectParser(Class<T> clazz, FileParser parserChain) {
-        this.clazz = clazz;
-        this.parserChain = parserChain;
-    }
-
     @Override
     public List<T> parse(File file) throws IOException, CsvException {
         String extension = FilenameUtils.getExtension(file.getName());
@@ -37,7 +32,7 @@ public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FilePa
         boolean isCsvFile = "csv".equals(extension);
         if (!isCsvFile) {
             if (parserChain == null) {
-                throw new UnsupportedDataTypeException("No file parser for file with extension " + extension);
+                throw new UnsupportedOperationException("No file parser for file with extension " + extension);
             }
 
             return parserChain.parse(file);
@@ -63,5 +58,9 @@ public class CsvFieldObjectParser<T extends FieldObjectRecord> implements FilePa
 
             return csvToBean.parse();
         }
+    }
+
+    public void setNextParser(FileParser parserChain) {
+        this.parserChain = parserChain;
     }
 }
