@@ -1,6 +1,7 @@
 package com.tutuka.txmanagement.reconciliation;
 
 import com.tutuka.txmanagement.reconciliation.constant.Constants;
+import com.tutuka.txmanagement.reconciliation.strategy.RecordMatcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Result of {@link com.tutuka.txmanagement.reconciliation.RecordMatcher} matching process
+ * Result of {@link RecordMatcher} matching process
  */
 @Data
 @NoArgsConstructor

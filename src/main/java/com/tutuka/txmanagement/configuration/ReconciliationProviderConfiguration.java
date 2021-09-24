@@ -3,6 +3,7 @@ package com.tutuka.txmanagement.configuration;
 import com.tutuka.txmanagement.model.TransactionRecord;
 import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
 import com.tutuka.txmanagement.reconciliation.ReconciliationProvider;
+import com.tutuka.txmanagement.reconciliation.constant.Constants;
 import com.tutuka.txmanagement.reconciliation.matcher.DateRangeMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.EqualMatcher;
 import com.tutuka.txmanagement.reconciliation.matcher.StringSimilarMatcher;
@@ -62,14 +63,14 @@ public class ReconciliationProviderConfiguration {
         MatchingCriteria transactionDescription = MatchingCriteria.<String>builder()
                 .columnName("TransactionDescription")
                 .score(1)
-                .valueMatcher(new StringSimilarMatcher())
+                .valueMatcher(new StringSimilarMatcher(Constants.MATCHER_LOWEST_SIMILARITY_PERCENTAGE))
                 .build();
         matchingCriteria.add(transactionDescription);
 
         MatchingCriteria transactionDate = MatchingCriteria.<Date>builder()
                 .columnName("TransactionDate")
                 .score(1)
-                .valueMatcher(new DateRangeMatcher())
+                .valueMatcher(new DateRangeMatcher(Constants.MATCHER_ACCEPT_RANGE_DAYS))
                 .build();
 
         matchingCriteria.add(transactionDate);

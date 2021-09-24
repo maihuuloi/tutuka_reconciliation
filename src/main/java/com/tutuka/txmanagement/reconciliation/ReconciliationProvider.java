@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class ReconciliationProvider {
 
-    private ReconciliationStrategy strategy;
+    private ReconciliationStrategy reconciliationStrategy;
     private final FileParser fileParser;
 
-    public ReconciliationProvider(ReconciliationStrategy strategy, FileParser fileParser) {
-        this.strategy = strategy;
+    public ReconciliationProvider(ReconciliationStrategy reconciliationStrategy, FileParser fileParser) {
+        this.reconciliationStrategy = reconciliationStrategy;
         this.fileParser = fileParser;
     }
 
@@ -53,7 +53,7 @@ public class ReconciliationProvider {
             throw e;
         }
 
-        List<ReconciliationResult> reconciliationResults = strategy.reconcile(source1Records, source2Records);
+        List<ReconciliationResult> reconciliationResults = reconciliationStrategy.reconcile(source1Records, source2Records);
 
         return reconciliationResults;
     }

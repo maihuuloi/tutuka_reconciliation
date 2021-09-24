@@ -8,6 +8,7 @@ import com.tutuka.txmanagement.reconciliation.parser.FileParser;
 import com.tutuka.txmanagement.reconciliation.strategy.GreedyReconciliationStrategy;
 import com.tutuka.txmanagement.reconciliation.strategy.IndexReconciliationStrategy;
 import com.tutuka.txmanagement.reconciliation.strategy.ReconciliationStrategy;
+import com.tutuka.txmanagement.reconciliation.strategy.RecordMatcher;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -63,7 +64,9 @@ public class ReconciliationProviderBuilder {
             strategy = new GreedyReconciliationStrategy(recordMatcher);
         }
 
-        return new ReconciliationProvider(strategy, fileParser());
+        FileParser fileParser = fileParser();
+
+        return new ReconciliationProvider(strategy, fileParser);
     }
 
     private FileParser fileParser() {

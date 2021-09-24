@@ -2,7 +2,6 @@ package com.tutuka.txmanagement.reconciliation.strategy;
 
 import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
-import com.tutuka.txmanagement.reconciliation.RecordMatcher;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.util.ArrayList;
@@ -45,29 +44,29 @@ public class IndexReconciliationStrategy implements ReconciliationStrategy {
         List<ReconciliationResult> reconciliationResults = new ArrayList<>();
 
         List<Record> source1NoKeyFoundRecords = new ArrayList<>();
-        Map<Object, List<Record>> file2IdMap = index(source2Records);
+        Map<Object, List<Record>> file2Index = index(source2Records);
         for (Record source1Record : source1Records) {
             ReconciliationResult result = new ReconciliationResult();
             Object indexValue = source1Record.getValueByColumnName(indexColumn);
 
-            List<Record> source2RecordList = file2IdMap.get(indexValue);
+            List<Record> source2RecordList = file2Index.get(indexValue);
             if (source2RecordList == null || source2RecordList.isEmpty()) {
                 source1NoKeyFoundRecords.add(source1Record);
                 continue;
             } else {
                 MatchingResult bestMatch = MatchingResult.zeroMatching();
-                int index = 0;
+                int bestMatchIndex = 0;
                 for (int i = 0; i < source2RecordList.size(); i++) {
                     MatchingResult matchingResult = recordMatcher.compare(source1Record, source2RecordList.get(i));
                     boolean isHigherThanCurrentBestMatch = bestMatch.getMatchingPercentage().compareTo(matchingResult.getMatchingPercentage()) == -1;
 
                     if (isHigherThanCurrentBestMatch) {
                         bestMatch = matchingResult;
-                        index = i;
+                        bestMatchIndex = i;
                     }
                 }
                 result.setMatchingResult(bestMatch);
-                Record source2Record = source2RecordList.remove(index);
+                Record source2Record = source2RecordList.remove(bestMatchIndex);
                 source2Records.remove(source2Record);
                 result.setRecord2(source2Record);
                 result.setRecord1(source1Record);

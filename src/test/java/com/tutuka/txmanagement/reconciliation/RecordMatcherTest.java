@@ -1,6 +1,7 @@
 package com.tutuka.txmanagement.reconciliation;
 
 import com.tutuka.txmanagement.reconciliation.matcher.EqualMatcher;
+import com.tutuka.txmanagement.reconciliation.strategy.RecordMatcher;
 import org.junit.Assert;
 import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.BeforeEach;

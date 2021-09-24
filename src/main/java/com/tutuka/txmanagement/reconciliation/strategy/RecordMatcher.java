@@ -1,5 +1,7 @@
-package com.tutuka.txmanagement.reconciliation;
+package com.tutuka.txmanagement.reconciliation.strategy;
 
+import com.tutuka.txmanagement.reconciliation.MatchingCriteria;
+import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.matcher.ValueMatcher;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 

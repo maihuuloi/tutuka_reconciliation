@@ -2,7 +2,7 @@ package com.tutuka.txmanagement.reconciliation.strategy;
 
 import com.tutuka.txmanagement.reconciliation.MatchingResult;
 import com.tutuka.txmanagement.reconciliation.ReconciliationResult;
-import com.tutuka.txmanagement.reconciliation.RecordMatcher;
+import com.tutuka.txmanagement.reconciliation.constant.Constants;
 import com.tutuka.txmanagement.reconciliation.model.Record;
 
 import java.util.ArrayList;
@@ -33,6 +33,11 @@ public class GreedyReconciliationStrategy implements ReconciliationStrategy{
                 if (isHigherThanCurrentBestMatch) {
                     bestMatch = matchingResult;
                     index = i;
+                }
+
+                boolean isPerfectMatch = bestMatch.getMatchingPercentage() == Constants.ONE_HUNDRED_PERCENTAGE;
+                if (isPerfectMatch) {
+                    break;
                 }
             }
             if (index == -1) {

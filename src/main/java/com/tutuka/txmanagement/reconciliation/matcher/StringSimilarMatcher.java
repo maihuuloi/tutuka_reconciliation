@@ -7,6 +7,12 @@ import org.apache.commons.text.similarity.JaroWinklerDistance;
 
 public class StringSimilarMatcher implements ValueMatcher<String> {
 
+    private Double matcherLowestSimilarityPercentage;
+
+    public StringSimilarMatcher(Double lowestSimilarityPercentage) {
+        this.matcherLowestSimilarityPercentage = lowestSimilarityPercentage;
+    }
+
     @Override
     public boolean compare(String value1, String value2) {
         if (value1 == null || value2 == null) {
@@ -15,7 +21,7 @@ public class StringSimilarMatcher implements ValueMatcher<String> {
 
         EditDistance<Double> editDistance = new JaroWinklerDistance();
         Double distance = editDistance.apply(value1, value2);
-        return distance > Constants.MATCHER_LOWEST_SIMILARITY_PERCENTAGE;
+        return distance > matcherLowestSimilarityPercentage;
     }
 
 }

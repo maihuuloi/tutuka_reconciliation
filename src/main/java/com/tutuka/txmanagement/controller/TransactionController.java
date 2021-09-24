@@ -21,7 +21,7 @@ public class TransactionController {
     private ReconciliationService reconciliationService;
 
     @PostMapping("/reconcile")
-    public ReconciliationResultResponse getConciliationOverview(@RequestParam("files") MultipartFile[] files) throws IOException {
+    public ReconciliationResultResponse reconcile(@RequestParam("files") MultipartFile[] files) throws IOException {
         if (files.length != 2) {
             throw new BadRequestException("transaction.reconciliation.invalid-file-numbers", "Invalid number of files");
         }
