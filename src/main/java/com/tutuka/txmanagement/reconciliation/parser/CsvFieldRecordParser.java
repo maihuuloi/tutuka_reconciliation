@@ -7,6 +7,7 @@ import com.opencsv.bean.HeaderNameBaseMappingStrategy;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import com.tutuka.txmanagement.reconciliation.exception.UnsupportedFileTypeException;
 import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import org.apache.commons.io.FilenameUtils;
 
@@ -31,7 +32,7 @@ public class CsvFieldRecordParser<T extends FieldRecord> implements FileParser<T
         boolean isCsvFile = "csv".equals(extension);
         if (!isCsvFile) {
             if (parserChain == null) {
-                throw new UnsupportedOperationException("No file parser for file with extension " + extension);
+                throw new UnsupportedFileTypeException("No file parser for file with extension " + extension);
             }
 
             return parserChain.parse(file);

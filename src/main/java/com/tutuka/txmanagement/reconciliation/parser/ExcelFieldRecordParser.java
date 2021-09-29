@@ -1,6 +1,7 @@
 package com.tutuka.txmanagement.reconciliation.parser;
 
 import com.opencsv.exceptions.CsvException;
+import com.tutuka.txmanagement.reconciliation.exception.UnsupportedFileTypeException;
 import com.tutuka.txmanagement.reconciliation.model.FieldRecord;
 import org.apache.commons.io.FilenameUtils;
 
@@ -23,7 +24,7 @@ public class ExcelFieldRecordParser<T extends FieldRecord> implements FileParser
         boolean isExcelFile = Arrays.asList("xlsx", "xls").contains(extension);
         if(!isExcelFile) {
             if (parserChain == null) {
-                throw new UnsupportedOperationException("No file parser for file with extension " + extension);
+                throw new UnsupportedFileTypeException("No file parser for file with extension " + extension);
             }
 
             return parserChain.parse(file);
